@@ -1,9 +1,9 @@
 ---
 name: 공통 이슈 템플릿
 about: 기능 추가, 버그 수정, 리팩토링 등 모든 작업 이슈에 사용
-title: '[Feat] #[이슈번호] [기능 요약]'
-labels: ''
-assignees: ''
+title: "[Feat] N주차 미션_닉네임"
+labels: ""
+assignees: ""
 ---
 
 ### 📝 이슈 개요
