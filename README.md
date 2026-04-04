@@ -4,7 +4,7 @@
 > 아래 이미지는 이해를 돕기 위한 예시 화면입니다
 
 ### 생성된 테이블
-<img width="241" height="322" alt="image" src="c:\Users\user\10th_UMC_NodeJS\jude\week4\image-1.png" />
+<img width="241" height="322" alt="image" ![alt text](image-4.png) />
 
 ### Datagrip 내 다이어그램 
-<img width="1344" height="1055" alt="image" src="c:\Users\user\10th_UMC_NodeJS\jude\week4\image-2.png" />
+<img width="1344" height="1055" alt="image" ![alt text](image-3.png) />
