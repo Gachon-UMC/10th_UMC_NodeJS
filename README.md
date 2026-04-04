@@ -4,7 +4,7 @@
 > 아래 이미지는 이해를 돕기 위한 예시 화면입니다
 
 ### 생성된 테이블
-<img width="241" height="322" alt="image" src="https://github.com/user-attachments/assets/a4349ba8-61f4-4e91-b21e-06305211edcc" />
+<img width="241" height="322" alt="image" src="c:\Users\user\OneDrive\바탕 화면\image-1.png" />
 
 ### Datagrip 내 다이어그램 
-<img width="1344" height="1055" alt="image" src="https://github.com/user-attachments/assets/f6eb4f4f-95f0-4c4d-9607-f576defcd606" />
+<img width="1344" height="1055" alt="image" src="c:\Users\user\OneDrive\바탕 화면\image-2.png" />
