@@ -6,10 +6,14 @@ import {
   getUserPreferencesByUserId,
   setPreference,
 } from "../repositories/user.repository.js";
+import bcrypt from "bcrypt";
 
 export const userSignUp = async (data: UserSignUpRequest) => {
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+
   const joinUserId = await addUser({
     email: data.email,
+    password: hashedPassword,
     name: data.name,
     gender: data.gender,
     birthDate: new Date(data.birthDate),
