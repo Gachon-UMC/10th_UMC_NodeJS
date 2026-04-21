@@ -21,6 +21,6 @@ export const handleUserSignUp = async (
       data: user,
     });
   } catch (err) {
-    next(err); // 🔥 이게 핵심
+    next(err);
   }
 };
