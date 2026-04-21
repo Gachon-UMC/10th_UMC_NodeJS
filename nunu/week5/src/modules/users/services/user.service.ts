@@ -9,6 +9,21 @@ import {
 import bcrypt from "bcrypt";
 
 export const userSignUp = async (data: UserSignUpRequest) => {
+  // 이메일 형식 검사
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(data.email)) {
+    const err = new Error("올바르지 않은 이메일 형식입니다.");
+    (err as any).statusCode = 400;
+    throw err;
+  }
+
+  // 비밀번호 형식 검사
+  if (!data.password || data.password.length < 6) {
+    const err = new Error("비밀번호는 6자 이상이어야 합니다.");
+    (err as any).statusCode = 400;
+    throw err;
+  }
+
   const hashedPassword = await bcrypt.hash(data.password, 10);
 
   const joinUserId = await addUser({
@@ -21,8 +36,18 @@ export const userSignUp = async (data: UserSignUpRequest) => {
     phoneNumber: data.phoneNumber,
   });
 
+  // 이메일 중복
   if (joinUserId === null) {
-    throw new Error("이미 존재하는 이메일입니다.");
+    const err = new Error("이미 존재하는 이메일입니다.");
+    (err as any).statusCode = 409;
+    throw err;
+  }
+
+  // preference 없을 때 방어
+  if (!data.preferences || data.preferences.length === 0) {
+    const err = new Error("선호 카테고리를 최소 1개 선택해야 합니다.");
+    (err as any).statusCode = 400;
+    throw err;
   }
 
   for (const preference of data.preferences) {
