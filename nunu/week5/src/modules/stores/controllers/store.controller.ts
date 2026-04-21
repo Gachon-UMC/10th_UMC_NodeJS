@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { StoreRequest } from "../dtos/store.dto.js";
 import { createStore } from "../services/store.service.js";
+import { StoreRequest } from "../dtos/store.dto.js";
 
 export const handleCreateStore = async (
   req: Request,

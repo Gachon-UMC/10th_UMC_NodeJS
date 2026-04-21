@@ -2,14 +2,14 @@ import { responseFromStore, StoreRequest } from "../dtos/store.dto.js";
 import { addStore, getRegionById } from "../repositories/store.repository.js";
 
 export const createStore = async (data: StoreRequest) => {
-  // 1. 필수값 체크
+  // 필수값 체크
   if (!data.name || !data.storeType || !data.regionId) {
     const err = new Error("필수값이 누락되었습니다.");
     (err as any).statusCode = 400;
     throw err;
   }
 
-  // 2. region 존재 확인
+  // region 존재 확인
   const region = await getRegionById(data.regionId);
 
   if (!region) {
@@ -25,7 +25,7 @@ export const createStore = async (data: StoreRequest) => {
     regionId: data.regionId,
   });
 
-  // 4. 응답 데이터 구성
+  // 응답 데이터 구성
   return responseFromStore({
     id: storeId,
     name: data.name,
