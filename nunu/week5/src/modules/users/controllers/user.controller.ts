@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { UserSignUpRequest } from "../dtos/user.dto.js";
 import { userSignUp } from "../services/user.service.js";
+import { error } from "node:console";
 
 export const handleUserSignUp = async (
   req: Request,
@@ -15,5 +16,11 @@ export const handleUserSignUp = async (
   const user = await userSignUp(req.body as UserSignUpRequest);
 
   //성공 응답 보내기
-  res.status(StatusCodes.OK).json({ result: user });
+  res.status(StatusCodes.OK).json({
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: "회원가입이 완료되었습니다.",
+    data: user,
+    error: null,
+  });
 };
