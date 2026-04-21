@@ -4,6 +4,7 @@ import cors from "cors";
 import { handleUserSignUp } from "./modules/users/controllers/user.controller.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import { handleCreateStore } from "./modules/stores/controllers/store.controller.js";
+import { handleCreateReview } from "./modules/stores/controllers/review.controller.js";
 
 // 1. 환경 변수 설정
 dotenv.config();
@@ -22,8 +23,10 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World! This is TypeScript Server!");
 });
 
+// 4. API 라우트
 app.post("/api/v1/users/signup", handleUserSignUp);
 app.post("/api/v1/stores", handleCreateStore);
+app.post("/api/v1/stores/:storeId/reviews", handleCreateReview);
 app.use(errorHandler);
 
 // 4. 서버 시작

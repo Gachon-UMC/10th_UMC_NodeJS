@@ -1,7 +1,7 @@
-import { responseFromStore, StoreRequest } from "../dtos/store.dto.js";
+import { responseFromStore, CreateStoreRequest } from "../dtos/store.dto.js";
 import { addStore, getRegionById } from "../repositories/store.repository.js";
 
-export const createStore = async (data: StoreRequest) => {
+export const createStore = async (data: CreateStoreRequest) => {
   // 필수값 체크
   if (!data.name || !data.storeType || !data.regionId) {
     const err = new Error("필수값이 누락되었습니다.");

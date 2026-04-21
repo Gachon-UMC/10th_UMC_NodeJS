@@ -1,9 +1,9 @@
 import { pool } from "../../../db.config.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { StoreRequest } from "../dtos/store.dto.js";
+import { CreateStoreRequest } from "../dtos/store.dto.js";
 
 // 가게 생성
-export const addStore = async (data: StoreRequest) => {
+export const addStore = async (data: CreateStoreRequest) => {
   const conn = await pool.getConnection();
 
   try {

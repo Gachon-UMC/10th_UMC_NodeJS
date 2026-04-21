@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { createStore } from "../services/store.service.js";
-import { StoreRequest } from "../dtos/store.dto.js";
+import { CreateStoreRequest } from "../dtos/store.dto.js";
 
 export const handleCreateStore = async (
   req: Request,
@@ -12,13 +12,13 @@ export const handleCreateStore = async (
     console.log("가게 생성을 요청했습니다!");
     console.log("body:", req.body);
 
-    const user = await createStore(req.body as StoreRequest);
+    const store = await createStore(req.body as CreateStoreRequest);
 
     res.status(StatusCodes.CREATED).json({
       success: true,
       statusCode: StatusCodes.CREATED,
       message: "가게 생성이 완료되었습니다.",
-      data: user,
+      data: store,
     });
   } catch (err) {
     next(err);
