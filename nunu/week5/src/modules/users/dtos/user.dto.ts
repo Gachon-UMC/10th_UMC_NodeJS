@@ -10,7 +10,7 @@ export interface UserSignUpRequest {
   preferences: number[];
 }
 
-export interface UserResponse {
+export interface User {
   id: number;
   email: string;
   name: string;
@@ -18,31 +18,19 @@ export interface UserResponse {
   birthDate: Date;
   address?: string;
   phoneNumber?: string;
-  preferences: {
-    id: number;
-    name: string;
-  }[];
 }
 
-export interface User {
-  id: number;
-  email: string;
+export interface UserPreference {
+  food_id: number;
   name: string;
-  gender?: "MALE" | "FEMALE";
-  birthDate: Date;
-  address: string;
-  phoneNumber: string;
 }
 
-interface ResponseFromUserParams {
+interface UserResponse {
   user: User;
-  preferences: any[];
+  preferences: UserPreference[];
 }
 
-export const responseFromUser = ({
-  user,
-  preferences,
-}: ResponseFromUserParams): UserResponse => {
+export const responseFromUser = ({ user, preferences }: UserResponse) => {
   return {
     id: user.id,
     email: user.email,

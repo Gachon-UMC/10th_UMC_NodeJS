@@ -3,6 +3,7 @@ import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { handleUserSignUp } from "./modules/users/controllers/user.controller.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import { handleCreateStore } from "./modules/users/controllers/store.controller.js";
 
 // 1. 환경 변수 설정
 dotenv.config();
@@ -22,6 +23,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.post("/api/v1/users/signup", handleUserSignUp);
+app.post("/api/v1/stores", handleCreateStore);
 app.use(errorHandler);
 
 // 4. 서버 시작
