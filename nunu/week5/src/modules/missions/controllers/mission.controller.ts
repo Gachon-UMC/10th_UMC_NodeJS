@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { postUserMission } from "../services/mission.service.js";
+import { createUserMission } from "../services/mission.service.js";
 
-export const handlePostUserMission = async (
+export const handleCreateUserMission = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -12,7 +12,7 @@ export const handlePostUserMission = async (
 
     const missionId = Number(req.params.missionId);
 
-    const review = await postUserMission(missionId);
+    const review = await createUserMission(missionId);
 
     res.status(StatusCodes.CREATED).json({
       success: true,

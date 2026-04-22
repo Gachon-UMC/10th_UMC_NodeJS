@@ -5,7 +5,7 @@ import { handleUserSignUp } from "./modules/users/controllers/user.controller.js
 import errorHandler from "./middlewares/errorHandler.js";
 import { handleCreateStore } from "./modules/stores/controllers/store.controller.js";
 import { handleCreateReview } from "./modules/stores/controllers/review.controller.js";
-import { handlePostUserMission } from "./modules/missions/controllers/mission.controller.js";
+import { handleCreateUserMission } from "./modules/missions/controllers/mission.controller.js";
 
 // 1. 환경 변수 설정
 dotenv.config();
@@ -28,7 +28,7 @@ app.get("/", (req: Request, res: Response) => {
 app.post("/api/v1/users/signup", handleUserSignUp);
 app.post("/api/v1/stores", handleCreateStore);
 app.post("/api/v1/stores/:storeId/reviews", handleCreateReview);
-app.post("/api/v1/missions/:missionId/challenges", handlePostUserMission);
+app.post("/api/v1/missions/:missionId/challenges", handleCreateUserMission);
 app.use(errorHandler);
 
 // 4. 서버 시작
