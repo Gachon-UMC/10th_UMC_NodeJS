@@ -9,7 +9,9 @@ export interface CreateReviewResponse {
   updatedAt: string;
 }
 
-export const responseFromReview = (review: CreateReviewResponse) => {
+export const responseFromReview = (
+  review: CreateReviewResponse,
+): CreateReviewResponse => {
   return {
     reviewId: review.reviewId,
     createdAt: review.createdAt,

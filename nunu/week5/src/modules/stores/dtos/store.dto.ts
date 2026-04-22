@@ -11,7 +11,9 @@ export interface CreateStoreResponse {
   updatedAt: string;
 }
 
-export const responseFromStore = (store: CreateStoreResponse) => {
+export const responseFromStore = (
+  store: CreateStoreResponse,
+): CreateStoreResponse => {
   return {
     id: store.id,
     name: store.name,
