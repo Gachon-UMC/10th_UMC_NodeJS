@@ -19,7 +19,7 @@ export const createStore = async (data: CreateStoreRequest) => {
   }
 
   // DB 저장
-  const storeId = await addStore({
+  const store = await addStore({
     name: data.name,
     storeType: data.storeType,
     regionId: data.regionId,
@@ -27,7 +27,9 @@ export const createStore = async (data: CreateStoreRequest) => {
 
   // 응답 데이터 구성
   return responseFromStore({
-    id: storeId,
+    id: store.id,
     name: data.name,
+    createdAt: store.created_at,
+    updatedAt: store.updated_at,
   });
 };

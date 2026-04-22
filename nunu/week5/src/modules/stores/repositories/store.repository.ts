@@ -13,7 +13,15 @@ export const addStore = async (data: CreateStoreRequest) => {
       [data.name, data.storeType, data.regionId],
     );
 
-    return result.insertId;
+    const storeId = result.insertId;
+
+    // 생성된 데이터 조회
+    const [rows]: any = await conn.query(
+      `SELECT id, created_at, updated_at FROM store WHERE id = ?`,
+      [storeId],
+    );
+
+    return rows[0];
   } catch (err) {
     throw new Error(`오류가 발생했어요: ${err}`);
   } finally {
