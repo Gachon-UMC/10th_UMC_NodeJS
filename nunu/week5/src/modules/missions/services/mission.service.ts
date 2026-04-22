@@ -2,6 +2,7 @@ import { responseFromUserMission } from "../dtos/mission.dto.js";
 import {
   addUserMission,
   getMissionById,
+  getUserMissionByMissionId,
 } from "../repositories/mission.repository.js";
 
 export const postUserMission = async (missionId: number) => {
@@ -16,11 +17,21 @@ export const postUserMission = async (missionId: number) => {
     throw err;
   }
 
-  const review = await addUserMission(userId, missionId);
+  // 이미 도전 중인 미션인지 확인
+  const existing = await getUserMissionByMissionId(userId, missionId);
+
+  if (existing) {
+    const err = new Error("이미 도전 중인 미션입니다.");
+    (err as any).statusCode = 400;
+    throw err;
+  }
+
+  // 생성
+  const userMission = await addUserMission(userId, missionId);
 
   return responseFromUserMission({
-    id: review.id,
-    createdAt: review.created_at,
-    updatedAt: review.updated_at,
+    id: userMission.id,
+    createdAt: userMission.created_at,
+    updatedAt: userMission.updated_at,
   });
 };

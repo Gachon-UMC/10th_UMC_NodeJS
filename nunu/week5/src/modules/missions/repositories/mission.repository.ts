@@ -43,3 +43,16 @@ export const getMissionById = async (
     throw new Error(`오류가 발생했어요: ${err}`);
   }
 };
+
+// 이미 도전 중인 미션인지 확인
+export const getUserMissionByMissionId = async (
+  userId: number,
+  missionId: number,
+): Promise<RowDataPacket | null> => {
+  const [rows] = await pool.query<RowDataPacket[]>(
+    `SELECT * FROM user_mission WHERE user_id = ? AND mission_id = ?`,
+    [userId, missionId],
+  );
+
+  return rows[0] || null;
+};
