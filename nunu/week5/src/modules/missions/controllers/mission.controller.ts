@@ -12,13 +12,13 @@ export const handleCreateUserMission = async (
 
     const missionId = Number(req.params.missionId);
 
-    const review = await createUserMission(missionId);
+    const mission = await createUserMission(missionId);
 
     res.status(StatusCodes.CREATED).json({
       success: true,
       statusCode: StatusCodes.CREATED,
       message: "도전 미션이 추가되었습니다.",
-      data: review,
+      data: mission,
     });
   } catch (err) {
     next(err);
