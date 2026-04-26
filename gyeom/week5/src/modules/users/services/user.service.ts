@@ -7,18 +7,23 @@ import {
   setPreference,addUserMission, getUserMission, getUserMissionById
 } from "../repositories/user.repository.js";
 import { getMission } from "../../mission/repository/mission.repository.js";
+import bcrypt from "bcrypt";
 
 
 
 export const userSignUp = async (data: UserSignUpRequest) => {
+
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+
   const joinUserId = await addUser({
     email: data.email,
     name: data.name,
     gender: data.gender,
-    birth: new Date(data.birth), // 문자열을 Date 객체로 변환해서 넘겨줍니다. 
+    birth: new Date(data.birth),
     address: data.address,
     detailAddress: data.detailAddress,
     phoneNumber: data.phoneNumber,
+    password: hashedPassword, 
   });
 
   if (joinUserId === null) {
@@ -31,10 +36,8 @@ export const userSignUp = async (data: UserSignUpRequest) => {
 
   const user = await getUser(joinUserId);
   const preferences = await getUserPreferencesByUserId(joinUserId);
-
   return responseFromUser({ user, preferences });
 };
-
 
 export const userMissionAdd = async (userId: number, data: UserMissionAddRequest) => {
   const mission = await getMission(data.missionId);

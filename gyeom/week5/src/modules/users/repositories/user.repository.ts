@@ -4,22 +4,16 @@ import { pool } from "../../../db.config.js";
 // 1. User 데이터 삽입
 export const addUser = async (data: any): Promise<number | null> => {
   const conn = await pool.getConnection();
-
   try {
-    // [confirm] 뒤에 타입을 명시해 줍니다. (조회 결과는 배열 형태예요)
     const [confirm] = await pool.query<RowDataPacket[]>(
       `SELECT EXISTS(SELECT 1 FROM user WHERE email = ?) as isExistEmail;`,
       [data.email]
     );
+    if (confirm[0]?.isExistEmail) return null;
 
-    // 이제 confirm[0] 뒤에 점을 찍어도 에러가 나지 않아요!
-    if (confirm[0]?.isExistEmail) {
-      return null;
-    }
-
-    // 삽입 결과는 ResultSetHeader 타입을 사용합니다.
     const [result] = await pool.query<ResultSetHeader>(
-      `INSERT INTO user (email, name, gender, birth, address, detail_address, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?);`,
+      `INSERT INTO user (email, name, gender, birth, address, detail_address, phone_number, password)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
       [
         data.email,
         data.name,
@@ -28,9 +22,9 @@ export const addUser = async (data: any): Promise<number | null> => {
         data.address,
         data.detailAddress,
         data.phoneNumber,
+        data.password,  // 해싱된 비밀번호
       ]
     );
-
     return result.insertId;
   } catch (err) {
     throw new Error(`오류가 발생했어요: ${err}`);

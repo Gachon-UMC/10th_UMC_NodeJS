@@ -6,6 +6,7 @@ export interface UserSignUpRequest {
   birth: string;
   address?: string;       // ?가 붙으면 '없을 수도 있음(선택)'이라는 뜻이에요!
   detailAddress?: string;
+  password: string; 
   phoneNumber: string;
   preferences: number[];
 }
