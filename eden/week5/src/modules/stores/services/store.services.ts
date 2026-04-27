@@ -1,5 +1,5 @@
-import { AddStoreRequestDTO, AddReviewRequestDTO } from "../dtos/store.dtos.js";
-import { addReview, addStore, getStoreById } from "../repositories/store.repositories.js";
+import { AddStoreRequestDTO, AddReviewRequestDTO, AddMissionRequestDTO } from "../dtos/store.dtos.js";
+import { addReview, addStore, getStoreById, addMission } from "../repositories/store.repositories.js";
 
 export const createStore = async (regionId: number, storeData: AddStoreRequestDTO) => {
   // 데이터베이스에 가게 추가
@@ -35,4 +35,21 @@ export const createReview = async (storeId: number, reviewData: AddReviewRequest
 
   // 공적으로 추가된 리뷰의 ID를 반환
   return { newReviewId };
+};
+
+export const createMission = async (storeId: number, missionData: AddMissionRequestDTO) => {
+  // 1. 가게가 실제로 존재하는지 확인 (기존 함수 재사용)
+  const store = await getStoreById(storeId);
+  if (!store) {
+    throw new Error("존재하지 않는 가게입니다.");
+  }
+
+  // 2. 가게가 존재하면 미션을 추가
+  const newMissionId = await addMission(storeId, {
+    content: missionData.content,
+    point: missionData.point,
+  });
+
+  // 3. 성공적으로 추가된 미션의 ID를 반환
+  return { newMissionId };
 };

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { createStore, createReview } from "../services/store.services.js";
+import { createStore, createReview, createMission } from "../services/store.services.js";
 import { AddReviewRequestDTO } from "../dtos/store.dtos.js";
 
 export const handleAddStore = async (req: Request, res: Response, next: NextFunction) => {
@@ -47,6 +47,24 @@ export const handleAddReview = async (req: Request, res: Response, next: NextFun
   try {
     // 서비스 함수에 DTO 객체 전체를 전달
     const result = await createReview(storeId, reviewData);
+    res.status(StatusCodes.CREATED).json({ result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const handleAddMission = async (req: Request, res: Response, next: NextFunction) => {
+  const { storeId: rawStoreId } = req.params;
+
+  if (typeof rawStoreId !== 'string') {
+    return res.status(StatusCodes.BAD_REQUEST).json({ message: "유효하지 않은 가게 ID입니다." });
+  }
+  const storeId = parseInt(rawStoreId, 10);
+
+  const missionData = req.body;
+
+  try {
+    const result = await createMission(storeId, missionData);
     res.status(StatusCodes.CREATED).json({ result });
   } catch (err) {
     next(err);

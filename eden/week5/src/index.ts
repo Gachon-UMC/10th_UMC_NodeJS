@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { handleUserSignUp } from "./modules/users/controllers/user.controllers.js";
-import { handleAddReview, handleAddStore } from "./modules/stores/controllers/store.controllers.js";
+import { handleAddMission, handleAddReview, handleAddStore } from "./modules/stores/controllers/store.controllers.js";
 // 1. 환경 변수 설정
 dotenv.config();
 
@@ -40,6 +40,11 @@ app.post("/api/v1/stores/:storeId/reviews", handleAddReview);
 //     "userId": 8,
 //     "rating": 5,
 //     "comment": "맛있다!"
+// }
+app.post("/api/v1/stores/:storeId/missions", handleAddMission);
+// {
+//   "content": "음식 남기지 않고 다 먹기",
+//   "point": 100
 // }
 // 4. 서버 시작
 app.listen(port, () => {
