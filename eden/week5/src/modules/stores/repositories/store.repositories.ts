@@ -35,3 +35,35 @@ export const getStoreById = async (storeId: number): Promise<any> => {
     conn.release();
   }
 };
+//리뷰 추가
+// ... existing code ...
+// ... getStoreById, addReview functions ...
+
+// 미션을 데이터베이스에 추가하는 함수
+export const addMission = async (storeId: number, data: any): Promise<number> => {
+  const conn = await pool.getConnection();
+  try {
+    const [result] = await pool.query<ResultSetHeader>(
+      "INSERT INTO mission (store_id, content, point) VALUES (?, ?, ?);",
+      [storeId, data.content, data.point]
+    );
+    return result.insertId;
+  } catch (err) {
+    throw new Error(`미션 추가 중 오류 발생: ${err}`);
+  } finally {
+    conn.release();
+  }
+};
+  const conn = await pool.getConnection();
+  try {
+    const [result] = await pool.query<ResultSetHeader>(
+      "INSERT INTO review (store_id, user_id, rating, comment) VALUES (?, ?, ?, ?);",
+      [storeId, userId, data.rating, data.comment]
+    );
+    return result.insertId;
+  } catch (err) {
+    throw new Error(`리뷰 추가 중 오류 발생: ${err}`);
+  } finally {
+    conn.release();
+  }
+};
