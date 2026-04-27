@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import { handleUserSignUp } from "./modules/users/controllers/user.controllers.js";
-
+import { handleAddStore } from "./modules/stores/controllers/store.controllers.js";
 // 1. 환경 변수 설정
 dotenv.config();
 
@@ -21,6 +21,20 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.post("/api/v1/users/signup", handleUserSignUp);
+// {
+//   "email": "jerry@example.com",
+//   "name": "제리",
+//   "gender": "F",
+//   "birth": "2025-03-08",
+//   "address": "주소1",
+//   "detailAddress": "세부주소1",
+//   "phoneNumber": "010-1234-1234",
+//   "preferences":["KOREAN"]
+// }
+app.post("/api/v1/region/:regionId/stores", handleAddStore);
+//{regionId :1
+//   foodCategory: "KOREAN",
+//   name: "맛집1",
 
 // 4. 서버 시작
 app.listen(port, () => {
