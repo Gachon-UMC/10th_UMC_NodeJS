@@ -131,3 +131,36 @@ export const getStoreById = async (storeId: number): Promise<any> => {
     conn.release();
   }
 };
+
+// 사용자가 특정 미션에 이미 도전 중인지 확인하는 함수
+export const isMissionChallenged = async (userId: number, missionId: number): Promise<boolean> => {
+  const conn = await pool.getConnection();
+  try {
+    const [rows] = await pool.query<RowDataPacket[]>(
+      "SELECT EXISTS(SELECT 1 FROM user_mission WHERE user_id = ? AND mission_id = ? And status = 'challenging') as isExist;",
+      [userId, missionId]
+    );
+    return rows && rows[0] ? rows[0].isExist === 1 : false; // 1이면 true(존재), 0이면 false(존재하지 않음)
+  } catch (err) {
+    throw new Error(`미션 도전 여부 확인 중 오류 발생: ${err}`);
+  } finally {
+    conn.release();
+  }
+};
+
+// 사용자의 미션 도전을 데이터베이스에 추가하는 함수
+export const challengeMission = async (userId: number, missionId: number): Promise<number> => {
+  const conn = await pool.getConnection();
+  try {
+    const [result] = await pool.query<ResultSetHeader>(
+      "INSERT INTO user_mission (user_id, mission_id, status) VALUES (?, ?, 'challenging');",
+      [userId, missionId]
+    );
+    return result.insertId;
+  } catch (err) {
+    // Foreign key 오류 (존재하지 않는 사용자 또는 미션)는 여기서 잡힐 수 있습니다.
+    throw new Error(`미션 도전 추가 중 오류 발생: ${err}`);
+  } finally {
+    conn.release();
+  }
+};
