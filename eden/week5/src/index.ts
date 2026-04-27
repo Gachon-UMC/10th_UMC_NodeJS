@@ -31,10 +31,14 @@ app.post("/api/v1/users/signup", handleUserSignUp);
 //   "phoneNumber": "010-1234-1234",
 //   "preferences":["KOREAN"]
 // }
+
+//특정 지역에 가게 추가하기
 app.post("/api/v1/region/:regionId/stores", handleAddStore);
 // {"regionId" :1,
 // "foodCategory": "KOREAN",
 // "name": "맛집1"}
+
+//가게에 리뷰 추가하기
 app.post("/api/v1/stores/:storeId/reviews", handleAddReview);
 // {
 //     "userId": 8,
@@ -48,7 +52,7 @@ app.post("/api/v1/stores/:storeId/missions", handleAddMission);
 // }
 
 
-
+//미션 도전중으로 바꾸기(바꿔서 user_mission 테이블에 추가하기)
 app.post("/api/v1/users/:userId/missions/:missionId", handleChallengeMission);
 
 // 4. 서버 시작
