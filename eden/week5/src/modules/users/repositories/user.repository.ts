@@ -19,10 +19,12 @@ export const addUser = async (data: any): Promise<number | null> => {
 
     // 삽입 결과는 ResultSetHeader 타입을 사용합니다.
     const [result] = await pool.query<ResultSetHeader>(
-      `INSERT INTO user (email, name, gender, birth, address, detail_address, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?);`,
+      // 1. password 컬럼 추가
+      `INSERT INTO user (email, name, password, gender, birth, address, detail_address, phone_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
       [
         data.email,
         data.name,
+        data.password, // 2. 해시된 비밀번호를 배열에 추가
         data.gender,
         data.birth,
         data.address,
@@ -164,3 +166,4 @@ export const challengeMission = async (userId: number, missionId: number): Promi
     conn.release();
   }
 };
+

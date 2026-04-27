@@ -10,6 +10,7 @@ export enum FoodCategory {
 export interface UserSignUpRequest {
   email: string;
   name: string;
+  password: string; // password 필드 추가
   gender: string;
   birth: string | Date;
   address?: string;
@@ -26,6 +27,7 @@ export const bodyToUser = (body: UserSignUpRequest) => {
   return {
     email: body.email, //필수 
     name: body.name, // 필수
+    password: body.password, // password 필드 추가
     gender: body.gender, // 필수
     birth, // 필수
     address: body.address || "", //선택 
@@ -43,3 +45,4 @@ export const responseFromUser = (data: any) => {
     preferences: data.preferences
   };
 }
+
