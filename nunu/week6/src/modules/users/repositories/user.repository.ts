@@ -1,0 +1,52 @@
+import { prisma } from "../../../db.config.js";
+
+// User 데이터 삽입
+export const addUser = async (data: any): Promise<number | null> => {
+  // 1. 이미 존재하는 이메일인지 확인
+  const user = await prisma.user.findFirst({ where: { email: data.email } });
+
+  if (user) {
+    return null;
+  }
+
+  // 2. 새로운 유저 생성
+  const created = await prisma.user.create({
+    data: {
+      email: data.email,
+      password: data.password,
+      name: data.name,
+      gender: data.gender ?? null,
+      birthDate: new Date(data.birthDate),
+      address: data.address ?? "",
+      phoneNumber: data.phoneNumber ?? null,
+    },
+  });
+
+  return Number(created.id);
+};
+
+// 사용자 정보 얻기
+export const getUser = async (userId: number) => {
+  return await prisma.user.findFirstOrThrow({ where: { id: userId } });
+};
+
+// 음식 선호 카테고리 매핑
+export const setPreference = async (userId: number, foodId: number) => {
+  await prisma.userFoodCategory.create({
+    data: {
+      userId: userId,
+      foodId: foodId,
+    },
+  });
+};
+
+// 사용자 선호 카테고리 반환
+export const getUserPreferencesByUserId = async (userId: number) => {
+  return await prisma.userFoodCategory.findMany({
+    where: { userId: userId },
+    include: {
+      food: true, // 핵심: JOIN 대신 include를 써서 연관 데이터를 가져옵니다!
+    },
+    orderBy: { foodId: "asc" },
+  });
+};
