@@ -1,5 +1,4 @@
-import { RowDataPacket } from "mysql2";
-import { pool, prisma } from "../../../db.config.js";
+import { prisma } from "../../../db.config.js";
 
 export const addUserMission = async (userId: number, missionId: number) => {
   const created = await prisma.userMission.create({
