@@ -5,9 +5,7 @@ import {
   getUserMissionByMissionId,
 } from "../repositories/mission.repository.js";
 
-export const createUserMission = async (missionId: number) => {
-  const userId = 1; // 첫 번째 유저로 고정 (인증 기능이 없으므로)
-
+export const createUserMission = async (userId: number, missionId: number) => {
   // 미션 존재 확인
   const mission = await getMissionById(missionId);
 
@@ -22,7 +20,7 @@ export const createUserMission = async (missionId: number) => {
 
   if (existingMission) {
     const err = new Error("이미 도전 중인 미션입니다.");
-    (err as any).statusCode = 400;
+    (err as any).statusCode = 409;
     throw err;
   }
 

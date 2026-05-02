@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { handleCreateUserMission } from "../modules/missions/controllers/mission.controller.js";
+import { handleChallengeMission } from "../modules/missions/controllers/mission.controller.js";
 
 const router = Router();
 
-router.post("/:missionId/challenges", handleCreateUserMission);
+router.post("/:missionId/challenges", handleChallengeMission);
 
 export default router;

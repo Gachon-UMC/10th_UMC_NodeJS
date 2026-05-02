@@ -12,7 +12,23 @@ export const handleCreateStore = async (
     console.log("가게 생성을 요청했습니다!");
     console.log("body:", req.body);
 
-    const store = await createStore(req.body as CreateStoreRequest);
+    const { name, storeType, regionId } = req.body as CreateStoreRequest;
+
+    // 필수값 검증
+    if (!name || !storeType || regionId === undefined) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: "필수값이 누락되었습니다.",
+        data: null,
+      });
+    }
+
+    const store = await createStore({
+      name,
+      storeType,
+      regionId,
+    });
 
     res.status(StatusCodes.CREATED).json({
       success: true,
