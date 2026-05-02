@@ -25,7 +25,7 @@ model User {
   status        Int?
   inactiveDate  DateTime? @map("inactive_date")
   createdAt     DateTime  @default(now()) @map("created_at") @db.DateTime(6)
-  updatedAt     DateTime  @updatedAt @map("updated_at") @db.DateTime(6)
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(6)
 
   preferences UserFoodCategory[]
 
@@ -53,7 +53,7 @@ model UserFoodCategory {
   food           FoodCategory @relation(fields: [foodId], references: [id])
   foodId         BigInt       @map("food_id")
   createdAt      DateTime      @default(now()) @map("created_at") @db.DateTime(6)
-  updatedAt      DateTime      @updatedAt @map("updated_at") @db.DateTime(6)
+  updatedAt      DateTime  @default(now()) @updatedAt @map("updated_at") @db.DateTime(6)
 
   @@index([foodId])
   @@index([userId])
