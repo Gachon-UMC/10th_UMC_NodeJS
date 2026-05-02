@@ -18,8 +18,8 @@ export const createReview = async (
   const review = await addReview(userId, storeId, data);
 
   return responseFromReview({
-    reviewId: review.id,
-    createdAt: review.created_at,
-    updatedAt: review.updated_at,
+    reviewId: Number(review.id),
+    createdAt: review.createdAt.toISOString(),
+    updatedAt: review.updatedAt.toISOString(),
   });
 };

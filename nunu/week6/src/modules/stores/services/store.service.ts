@@ -20,9 +20,9 @@ export const createStore = async (data: CreateStoreRequest) => {
 
   // 응답 데이터 구성
   return responseFromStore({
-    id: store.id,
+    id: Number(store.id),
     name: data.name,
-    createdAt: store.created_at,
-    updatedAt: store.updated_at,
+    createdAt: store.createdAt.toISOString(),
+    updatedAt: store.updatedAt.toISOString(),
   });
 };

@@ -28,8 +28,8 @@ export const createUserMission = async (userId: number, missionId: number) => {
   const userMission = await addUserMission(userId, missionId);
 
   return responseFromUserMission({
-    id: userMission.id,
-    createdAt: userMission.created_at,
-    updatedAt: userMission.updated_at,
+    id: Number(userMission.id),
+    createdAt: userMission.createdAt.toISOString(),
+    updatedAt: userMission.updatedAt.toISOString(),
   });
 };
