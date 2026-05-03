@@ -2,6 +2,15 @@
 // import { pool } from "../../../db.config.js";
 import { prisma } from "../../../db.config.js";
 
+export const getUserMission = async (userId: number, missionId: number) => {
+  return await prisma.user_mission.findFirst({
+    where: {
+      user_id: userId,
+      mission_id: missionId,
+      status: "CHALLENGING",
+    },
+  });
+};
 
 // export const getUserMission = async (userId: number, missionId: number): Promise<any | null> => {
 //   const conn = await pool.getConnection();
@@ -18,12 +27,14 @@ import { prisma } from "../../../db.config.js";
 //     conn.release();
 //   }
 // };
-export const getUserMission = async (userId: number, missionId: number) => {
-  return await prisma.user_mission.findFirst({
-    where: {
-      user_id: userId,
-      mission_id: missionId,
+
+export const addUserMission = async (data: any) => {
+  return await prisma.user_mission.create({
+    data: {
+      user_id: data.userId,
+      mission_id: data.missionId,
       status: "CHALLENGING",
+      created_at: new Date(),
     },
   });
 };
@@ -44,14 +55,9 @@ export const getUserMission = async (userId: number, missionId: number) => {
 //   }
 // };
 
-export const addUserMission = async (data: any) => {
-  return await prisma.user_mission.create({
-    data: {
-      user_id: data.userId,
-      mission_id: data.missionId,
-      status: "CHALLENGING",
-      created_at: new Date(),
-    },
+export const getUserMissionById = async (userMissionId: number) => {
+  return await prisma.user_mission.findFirst({
+    where: { id: userMissionId },
   });
 };
 
@@ -71,13 +77,6 @@ export const addUserMission = async (data: any) => {
 //   }
 // };
 
-export const getUserMissionById = async (userMissionId: number) => {
-  return await prisma.user_mission.findFirst({
-    where: { id: userMissionId },
-  });
-};
-
-
 // 1. User 데이터 삽입
 // export const addUser = async (data: any): Promise<number | null> => {
 //   const conn = await pool.getConnection();
@@ -87,20 +86,10 @@ export const getUserMissionById = async (userMissionId: number) => {
 //       [data.email]
 //     );
 //     if (confirm[0]?.isExistEmail) return null;
-
 //     const [result] = await pool.query<ResultSetHeader>(
 //       `INSERT INTO user (email, name, gender, birth, address, detail_address, phone_number, password)
 //        VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
-//       [
-//         data.email,
-//         data.name,
-//         data.gender,
-//         data.birth,
-//         data.address,
-//         data.detailAddress,
-//         data.phoneNumber,
-//         data.password,  // 해싱된 비밀번호
-//       ]
+//       [data.email, data.name, data.gender, data.birth, data.address, data.detailAddress, data.phoneNumber, data.password]
 //     );
 //     return result.insertId;
 //   } catch (err) {
@@ -113,18 +102,15 @@ export const getUserMissionById = async (userMissionId: number) => {
 // 2. 사용자 정보 얻기
 // export const getUser = async (userId: number): Promise<any | null> => {
 //   const conn = await pool.getConnection();
-
 //   try {
 //     const [user] = await pool.query<RowDataPacket[]>(
 //       `SELECT * FROM user WHERE id = ?;`,
 //       [userId]
 //     );
-
 //     if (user.length === 0) {
 //       return null;
 //     }
-
-//     return user[0]; // 배열의 첫 번째 요소(유저 정보)를 반환합니다.
+//     return user[0];
 //   } catch (err) {
 //     throw new Error(`오류가 발생했어요: ${err}`);
 //   } finally {
@@ -132,10 +118,9 @@ export const getUserMissionById = async (userMissionId: number) => {
 //   }
 // };
 
-// // 3. 음식 선호 카테고리 매핑
+// 3. 음식 선호 카테고리 매핑
 // export const setPreference = async (userId: number, foodCategoryId: number): Promise<void> => {
 //   const conn = await pool.getConnection();
-
 //   try {
 //     await pool.query(
 //       `INSERT INTO user_favor_category (food_category_id, user_id) VALUES (?, ?);`,
@@ -148,10 +133,9 @@ export const getUserMissionById = async (userMissionId: number) => {
 //   }
 // };
 
-// // 4. 사용자 선호 카테고리 반환
+// 4. 사용자 선호 카테고리 반환
 // export const getUserPreferencesByUserId = async (userId: number): Promise<any[]> => {
 //   const conn = await pool.getConnection();
-
 //   try {
 //     const [preferences] = await pool.query<RowDataPacket[]>(
 //       "SELECT ufc.id, ufc.food_category_id, ufc.user_id, fcl.name " +
@@ -159,7 +143,6 @@ export const getUserMissionById = async (userMissionId: number) => {
 //       "WHERE ufc.user_id = ? ORDER BY ufc.food_category_id ASC;",
 //       [userId]
 //     );
-
 //     return preferences as any[];
 //   } catch (err) {
 //     throw new Error(`오류가 발생했어요: ${err}`);
@@ -168,19 +151,15 @@ export const getUserMissionById = async (userMissionId: number) => {
 //   }
 // };
 
-//---------------- 6주차 orm 사용해보기 시작------------
+// ---------------- 6주차 orm 사용해보기 시작 ------------
 
 // User 데이터 삽입
 // export const addUser = async (data: any) => {
-//   // 1. 이미 존재하는 이메일인지 확인
 //   const user = await prisma.user.findFirst({ where: { email: data.email } });
-  
 //   if (user) {
 //     return null;
 //   }
-
-//   // 2. 새로운 유저 생성
-//   const created = await prisma.user.create({ 
+//   const created = await prisma.user.create({
 //     data: {
 //       email: data.email,
 //       name: data.name,
@@ -189,9 +168,8 @@ export const getUserMissionById = async (userMissionId: number) => {
 //       address: data.address,
 //       detailAddress: data.detailAddress,
 //       phoneNumber: data.phoneNumber,
-//     } 
+//     }
 //   });
-
 //   return created.id;
 // };
 
@@ -199,7 +177,7 @@ export const getUserMissionById = async (userMissionId: number) => {
 //   return await prisma.user.findFirstOrThrow({ where: { id: userId } });
 // };
 
-// // 음식 선호 카테고리 매핑
+// 음식 선호 카테고리 매핑
 // export const setPreference = async (userId: number, foodCategoryId: number) => {
 //   await prisma.userFavorCategory.create({
 //     data: {
@@ -209,7 +187,7 @@ export const getUserMissionById = async (userMissionId: number) => {
 //   });
 // };
 
-// // 사용자 선호 카테고리 반환 (JOIN)
+// 사용자 선호 카테고리 반환 (JOIN)
 // export const getUserPreferencesByUserId = async (userId: number) => {
 //   return await prisma.userFavorCategory.findMany({
 //     where: { userId: userId },
@@ -220,10 +198,9 @@ export const getUserMissionById = async (userMissionId: number) => {
 //   });
 // };
 
+// ---------------- 6주차 orm 사용해보기 끝 ------------
 
-//---------------- 6주차 orm 사용해보기 끝------------
-
-//6주차 미션
+// 6주차 미션
 export const getUserMissions = async (userId: bigint, status?: string) => {
   return await prisma.user_mission.findMany({
     where: {

@@ -34,17 +34,14 @@ export const addStore = async (data: any) => {
 
 // export const getStore = async (storeId: number): Promise<any | null> => {
 //   const conn = await pool.getConnection();
-
 //   try {
 //     const [store] = await pool.query<RowDataPacket[]>(
 //       `SELECT * FROM store WHERE id = ?;`,
 //       [storeId]
 //     );
-
 //     if (store.length === 0) {
 //       return null;
 //     }
-
 //     return store[0];
 //   } catch (err) {
 //     throw new Error(`오류가 발생했어요: ${err}`);
@@ -57,10 +54,8 @@ export const getStore = async (storeId: number) => {
     where: { id: storeId },
   });
 };
+
 // ----------- 6주차 orm 사용해보기 시작 -----------
-//store 데이터 조회
-
-
 // export const getAllStoreReviews = async (
 //     storeId: number,
 //     cursor: number
@@ -83,8 +78,6 @@ export const getStore = async (storeId: number) => {
 //       },
 //       take: 5,
 //     });
-  
 //     return reviews;
 //   };
-
-  // ----------- 6주차 orm 사용해보기 끝 -----------
+// ----------- 6주차 orm 사용해보기 끝 -----------

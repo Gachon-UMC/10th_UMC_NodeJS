@@ -1,3 +1,5 @@
+import { Prisma } from "../../../generated/prisma/client.js"
+
 export interface StoreAddRequest {
   name: string;
   foodCategoryId: number;
@@ -5,6 +7,16 @@ export interface StoreAddRequest {
   address: string;
   latitude: number;
   longitude: number;
+}
+
+interface StoreRow {
+  id: bigint;
+  name: string;
+  food_category_id: bigint;
+  region_id: bigint;
+  address: string;
+  latitude: Prisma.Decimal;
+  longitude: Prisma.Decimal;
 }
 
 export const bodyToStore = (body: StoreAddRequest) => {
@@ -18,10 +30,10 @@ export const bodyToStore = (body: StoreAddRequest) => {
   };
 };
 
-export const responseFromStore = ({ store }: { store: any }) => {
+export const responseFromStore = ({ store }: { store: StoreRow | null }) => {
   return {
-    name: store.name,
-    regionId: store.regionId,
+    name: store?.name,
+    regionId: store?.region_id,
   };
 };
 
@@ -51,9 +63,7 @@ export interface ReviewListResponse {
   };
 }
 
-export const responseFromReviews = (
-  reviews: ReviewResponse[]
-): ReviewListResponse => {
+export const responseFromReviews = (reviews: ReviewResponse[]): ReviewListResponse => {
   const lastReview = reviews[reviews.length - 1];
   return {
     data: reviews,

@@ -4,6 +4,14 @@ export interface MissionAddRequest {
   deadline?: number;
 }
 
+interface MissionRow {
+  id: bigint;
+  store_id: bigint;
+  content: string;
+  reward_point: bigint;
+  deadline: bigint | null;
+}
+
 export const bodyToMission = (storeId: number, body: MissionAddRequest) => {
   return {
     storeId,
@@ -13,16 +21,16 @@ export const bodyToMission = (storeId: number, body: MissionAddRequest) => {
   };
 };
 
-export const responseFromMission = ({ mission }: { mission: any }) => {
+export const responseFromMission = ({ mission }: { mission: MissionRow | null }) => {
   return {
-    id: mission.id,
-    storeId: mission.store_id,
-    content: mission.content,
-    rewardPoint: mission.reward_point,
-    deadline: mission.deadline,
+    id: mission?.id,
+    storeId: mission?.store_id,
+    content: mission?.content,
+    rewardPoint: mission?.reward_point,
+    deadline: mission?.deadline,
   };
 };
 
-export const responseFromMissions = ({ missions }: { missions: any[] }) => {
+export const responseFromMissions = ({ missions }: { missions: MissionRow[] }) => {
   return missions.map((mission) => responseFromMission({ mission }));
 };

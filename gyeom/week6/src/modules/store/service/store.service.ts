@@ -1,17 +1,20 @@
-import { responseFromStore, StoreAddRequest , bodyToStore
-  ,ReviewListResponse,responseFromReviews
+import { responseFromStore, StoreAddRequest, bodyToStore,
+  ReviewListResponse, responseFromReviews
 } from "../dto/store.dto.js";
 import {
   addStore,
-  getStore
-  // ,
+  getStore,
   // getAllStoreReviews
 } from "../repository/store.repository.js";
 
 export const storeAdd = async (data: StoreAddRequest) => {
-  const store = await addStore(bodyToStore(data));
-  const storeData = await getStore(Number(store.id));
-  return responseFromStore({ store: storeData });
+  try {
+    const store = await addStore(bodyToStore(data));
+    const storeData = await getStore(Number(store.id));
+    return responseFromStore({ store: storeData });
+  } catch (err) {
+    throw new Error(`오류가 발생했어요: ${err}`);
+  }
 };
 
 // export const listStoreReviews = async (

@@ -13,6 +13,7 @@ export const addReview = async (data: any) => {
     },
   });
 };
+
 // export const addReview = async (data: any): Promise<number> => {
 //   const conn = await pool.getConnection();
 //   try {
@@ -34,6 +35,7 @@ export const getReview = async (reviewId: bigint) => {
     where: { id: reviewId },
   });
 };
+
 // export const getReview = async (reviewId: number): Promise<any | null> => {
 //   const conn = await pool.getConnection();
 //   try {

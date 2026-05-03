@@ -29,11 +29,13 @@ export const addMission = async (data: any) => {
 //     conn.release();
 //   }
 // };
+
 export const getMission = async (missionId: number) => {
   return await prisma.mission.findFirst({
     where: { id: missionId },
   });
 };
+
 // export const getMission = async (missionId: number): Promise<any | null> => {
 //   const conn = await pool.getConnection();
 //   try {
