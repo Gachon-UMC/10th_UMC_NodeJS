@@ -25,3 +25,6 @@ app.use("/api/v1", apiV1Router);
 app.listen(port, () => {
   console.log(`[server]: Server is running at <http://localhost>:${port}`);
 });
+(BigInt.prototype as any).toJSON = function () {
+  return this.toString();
+};

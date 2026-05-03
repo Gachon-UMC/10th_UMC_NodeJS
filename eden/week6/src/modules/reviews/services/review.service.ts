@@ -1,5 +1,5 @@
-import {addReview} from "../repositories/review.repositoriy.js";
-import { AddReviewRequestDTO } from "../dtos/review.dto.js";
+import {addReview, getReviewsByUserId} from "../repositories/review.repositoriy.js";
+import { AddReviewRequestDTO, responseFromMyReviews } from "../dtos/review.dto.js";
 import { getStoreById } from "../repositories/review.repositoriy.js";
 
 
@@ -21,3 +21,12 @@ export const createReview = async (storeId: number, reviewData: AddReviewRequest
   // 공적으로 추가된 리뷰의 ID를 반환
   return { newReviewId };
 };
+
+// 내가 작성한 리뷰 목록 조회 서비스
+export const listMyReviews = async (userId: number) => {
+    //레포지토리를 호출하여 데이터베이스에서 리뷰 목록을 가져옵니다.
+    const reviews = await getReviewsByUserId(userId);
+
+    //가져온 데이터를 DTO를 사용해 API 응답 형식으로 변환합니다.
+    return responseFromMyReviews(reviews);
+}

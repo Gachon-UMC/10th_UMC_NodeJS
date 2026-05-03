@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { handleAddReview } from "./controllers/review.controller.js";
+import { handleAddReview, handleListMyReviews } from "./controllers/review.controller.js";
 
 const reviewsRouter = Router();
 
 // /api/v1/stores/:storeId/reviews
-reviewsRouter.post("/stores/:storeId/reviews", handleAddReview);
-
+reviewsRouter.post("/reviews/:storeId", handleAddReview);
+reviewsRouter.get("/reviews", handleListMyReviews);
 export default reviewsRouter;

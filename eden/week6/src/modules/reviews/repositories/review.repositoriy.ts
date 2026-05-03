@@ -1,36 +1,73 @@
-import { pool } from "../../../db.config.js"; 
 import { prisma } from "../../../db.config.js";
-import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { StoreResponseDto } from "../dtos/review.dto.js";
 
+
+// 1. 리뷰를 데이터베이스에 추가하는 함수
 export const addReview = async (storeId: number, userId: number, data: any): Promise<number> => {
-  const conn = await pool.getConnection();
   try {
-    const [result] = await pool.query<ResultSetHeader>(
-      "INSERT INTO review (store_id, user_id, rating, comment) VALUES (?, ?, ?, ?);",
-      [storeId, userId, data.rating, data.comment]
-    );
-    return result.insertId;
+    const newReview = await prisma.review.create({
+      data: {
+        store_id: storeId, 
+        user_id: userId,   
+        rating: data.rating,
+        comment: data.comment,
+      },
+    });
+
+    // 생성된 리뷰의 ID 반환 
+    return Number(newReview.id);
   } catch (err) {
     throw new Error(`리뷰 추가 중 오류 발생: ${err}`);
-  } finally {
-    conn.release();
   }
 };
 
-export const getStoreById = async (storeId: number): Promise<any> => {
-  const conn = await pool.getConnection();
+// 2. ID로 가게 정보를 조회하는 함수 (JOIN 대체)
+export const getStoreById = async (storeId: number): Promise <StoreResponseDto | null> => {
   try {
-    const [rows] = await pool.query<RowDataPacket[]>(
-      `SELECT s.id, s.name, s.food_category, r.name as region_name 
-       FROM store s
-       JOIN region r ON s.region_id = r.id
-       WHERE s.id = ?;`,
-      [storeId]
-    );
-    return rows[0];
+    const store = await prisma.store.findUnique({
+      where: {
+        id: storeId,
+      },
+    
+      include: {
+        region: {
+          select: {
+            name: true, 
+          },
+        },
+      },
+    });
+
+    if (!store) return null;
+
+    
+    return {
+      id: Number(store.id),
+      name: store.name,
+      food_category: store.food_category,
+      region_name: store.region?.name, 
+    };
   } catch (err) {
     throw new Error(`가게 조회 중 오류 발생: ${err}`);
-  } finally {
-    conn.release();
   }
 };
+
+
+
+
+
+// 특정 사용자가 작성한 리뷰 목록을 가게 정보와 함께 조회
+export const getReviewsByUserId = async (userId: number) => {
+    
+    return await prisma.review.findMany({
+        where: {
+            user_id: userId,
+        },
+        include: {
+            store: true, 
+        },
+        orderBy: {
+            created_at: 'desc', // 최신순으로 정렬
+        }
+    });
+}

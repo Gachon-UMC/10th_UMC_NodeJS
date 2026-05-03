@@ -49,3 +49,17 @@ export const responseFromChallenge = (userMissionId: number) => {
     newUserMissionId: userMissionId
   };
 };
+
+
+
+// 1. 개별 선호 카테고리 아이템의 구조
+export interface UserPreferenceItemDto {
+  id: number;
+  foodCategoryId: number;
+  userId: number;
+}
+
+// 2. 전체 목록 응답 구조 (보통 배열을 감싸서 보냅니다)
+export interface UserPreferenceResponseDto {
+  preferences: UserPreferenceItemDto[];
+}

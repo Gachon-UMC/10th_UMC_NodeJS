@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -13,24 +8,31 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  email         String   @unique(map: "email") @db.VarChar(255)
-  name          String   @db.VarChar(100)
-  gender        String   @db.VarChar(15)
-  birth         DateTime @db.Date
-  address       String   @db.VarChar(255)
-  detailAddress String?  @map("detail_address") @db.VarChar(255)
-  phoneNumber   String   @map("phone_number") @db.VarChar(15)
-
+  id                  BigInt              @id @default(autoincrement())
+  name                String              @db.VarChar(50)
+  gender              String              @db.VarChar(1)
+  birth               DateTime            @db.Date
+  address             String              @db.VarChar(50)
+  email               String?             @db.VarChar(20)
+  status              user_status?        @default(normal)
+  withdraw_at         DateTime?           @db.DateTime(1)
+  signup_at           DateTime?           @default(now()) @db.DateTime(6)
+  total_point         Int?                @default(0)
+  phoneNumber         String?             @map("phone_number") @db.VarChar(15)
+  detailAddress       String?             @map("detail_address") @db.VarChar(255)
+  password            String              @db.VarChar(255)
+  inquiry             inquiry[]
+  review              review[]
   userFavorCategories UserFavorCategory[]
+  user_mission        user_mission[]
+  user_region_point   user_region_point[]
 
   @@map("user")
 }
 
 model FoodCategory {
-  id   Int    @id @default(autoincrement())
-  name String @db.VarChar(100)
-
+  id                  Int                 @id @default(autoincrement())
+  name                String              @db.VarChar(100)
   userFavorCategories UserFavorCategory[]
 
   @@map("food_category")
@@ -38,12 +40,139 @@ model FoodCategory {
 
 model UserFavorCategory {
   id             Int          @id @default(autoincrement())
-  user           User         @relation(fields: [userId], references: [id])
-  userId         Int          @map("user_id")
-  foodCategory   FoodCategory @relation(fields: [foodCategoryId], references: [id])
+  userId         BigInt       @map("user_id")
   foodCategoryId Int          @map("food_category_id")
+  foodCategory   FoodCategory @relation(fields: [foodCategoryId], references: [id], onDelete: Cascade, map: "fk_food_category")
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade, map: "fk_user")
 
-  @@index([foodCategoryId], map: "f_category_id")
-  @@index([userId], map: "user_id")
+  @@index([foodCategoryId], map: "f_category_id_idx")
+  @@index([userId], map: "user_id_idx")
   @@map("user_favor_category")
+}
+
+model inquiry {
+  id            BigInt          @id @default(autoincrement())
+  user_id       BigInt
+  title         String          @db.VarChar(100)
+  comment       String?         @db.Text
+  created_at    DateTime?       @default(now()) @db.DateTime(6)
+  reply_at      DateTime?       @db.DateTime(6)
+  user          User            @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inquiry_ibfk_1")
+  inquiry_reply inquiry_reply[]
+
+  @@index([user_id], map: "user_id")
+}
+
+model inquiry_reply {
+  id         BigInt  @id @default(autoincrement())
+  inquiry_id BigInt
+  reply      String? @db.Text
+  inquiry    inquiry @relation(fields: [inquiry_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "inquiry_reply_ibfk_1")
+
+  @@index([inquiry_id], map: "inquiry_id")
+}
+
+model mission {
+  id           BigInt         @id @default(autoincrement())
+  store_id     BigInt
+  content      String         @db.VarChar(100)
+  created_at   DateTime?      @default(now()) @db.DateTime(6)
+  updated_at   DateTime?      @default(now()) @db.DateTime(6)
+  expire_at    DateTime?      @db.DateTime(6)
+  point        Int?           @default(0)
+  store        store          @relation(fields: [store_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mission_ibfk_1")
+  user_mission user_mission[]
+
+  @@index([store_id], map: "store_id")
+}
+
+model region {
+  id                BigInt              @id @default(autoincrement())
+  name              String              @db.VarChar(50)
+  store             store[]
+  user_region_point user_region_point[]
+}
+
+model review {
+  id           BigInt         @id @default(autoincrement())
+  store_id     BigInt
+  user_id      BigInt
+  rating       Float          @db.Float
+  comment      String?        @db.Text
+  created_at   DateTime?      @default(now()) @db.DateTime(6)
+  updated_at   DateTime?      @default(now()) @db.DateTime(6)
+  store        store          @relation(fields: [store_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_ibfk_1")
+  user         User           @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_ibfk_2")
+  review_reply review_reply[]
+
+  @@index([store_id], map: "store_id")
+  @@index([user_id], map: "user_id")
+}
+
+model review_reply {
+  id        BigInt @id @default(autoincrement())
+  review_id BigInt
+  content   String @db.Text
+  review    review @relation(fields: [review_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "review_reply_ibfk_1")
+
+  @@index([review_id], map: "review_id")
+}
+
+model store {
+  id            BigInt              @id @default(autoincrement())
+  food_category store_food_category
+  region_id     BigInt
+  name          String              @db.VarChar(50)
+  created_at    DateTime?           @default(now()) @db.DateTime(6)
+  updated_at    DateTime?           @default(now()) @db.DateTime(6)
+  Field         String?             @db.VarChar(255)
+  mission       mission[]
+  review        review[]
+  region        region              @relation(fields: [region_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "store_ibfk_1")
+
+  @@index([region_id], map: "region_id")
+}
+
+model user_mission {
+  id           BigInt              @id @default(autoincrement())
+  user_id      BigInt
+  mission_id   BigInt
+  status       user_mission_status @default(uncompleted)
+  completed_at DateTime?           @db.DateTime(6)
+  user         User                @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_mission_ibfk_1")
+  mission      mission             @relation(fields: [mission_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_mission_ibfk_2")
+
+  @@index([mission_id], map: "mission_id")
+  @@index([user_id], map: "user_id")
+}
+
+model user_region_point {
+  id                    BigInt @id @default(autoincrement())
+  user_id               BigInt
+  region_id             BigInt
+  clear_count           Int?   @default(0)
+  reward_received_count Int?   @default(0)
+  user                  User   @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_region_point_ibfk_1")
+  region                region @relation(fields: [region_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_region_point_ibfk_2")
+
+  @@index([region_id], map: "region_id")
+  @@index([user_id], map: "user_id")
+}
+
+enum store_food_category {
+  KOREAN
+  CHINESE
+  JAPANESE
+  WESTERN
+}
+
+enum user_mission_status {
+  completed
+  uncompleted
+  challenging
+}
+
+enum user_status {
+  normal
+  withdrawn
 }
