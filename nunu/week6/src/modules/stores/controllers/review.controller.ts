@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { createReview } from "../services/review.service.js";
+import { createReview, getMyReviews } from "../services/review.service.js";
 import { CreateReviewRequest } from "../dtos/review.dto.js";
 
 export const handleCreateReview = async (
@@ -67,6 +67,52 @@ export const handleCreateReview = async (
       statusCode: StatusCodes.CREATED,
       message: "리뷰 생성이 완료되었습니다.",
       data: review,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const handleGetMyReviews = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    console.log("내 리뷰 목록 조회를 요청했습니다!");
+
+    const userId = 1; // 임시
+
+    const storeId = Number(req.params.storeId);
+
+    // userId 검증
+    if (!userId) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        success: false,
+        statusCode: StatusCodes.UNAUTHORIZED,
+        message: "사용자 정보가 없습니다.",
+        data: null,
+      });
+    }
+
+    if (!req.params.storeId || Number.isNaN(storeId)) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: "유효하지 않은 storeId 입니다.",
+        data: null,
+      });
+    }
+
+    const reviews = await getMyReviews(userId, storeId);
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "내 리뷰 목록 조회를 성공했습니다.",
+      data: {
+        reviews,
+      },
     });
   } catch (err) {
     next(err);

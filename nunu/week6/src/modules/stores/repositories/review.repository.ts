@@ -29,3 +29,26 @@ export const getStoreById = async (storeId: number) => {
     where: { id: storeId },
   });
 };
+
+export const getMyReviewsByStore = async (userId: number, storeId: number) => {
+  return await prisma.review.findMany({
+    where: {
+      userId: userId,
+      storeId: storeId,
+    },
+    select: {
+      id: true,
+      content: true,
+      starRate: true,
+      createdAt: true,
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
+    orderBy: {
+      id: "asc",
+    },
+  });
+};
