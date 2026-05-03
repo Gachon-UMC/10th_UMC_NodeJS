@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  name          String
+  phoneNumber   String   @map("phone_number")
+  detailAddress String?  @map("detail_address")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // 관계 설정
+  userFavorCategories UserFavorCategory[]
+  reviews             UserStoreReview[]
+  memberMissions      MemberMission[]
+
+  @@map("user")
+}
+
+model FoodCategory {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+  userFavorCategories UserFavorCategory[]
+
+  @@map("food_category")
+}
+
+model UserFavorCategory {
+  id             Int          @id @default(autoincrement())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         Int          @map("user_id")
+  foodCategory   FoodCategory @relation(fields: [foodCategoryId], references: [id])
+  foodCategoryId Int          @map("food_category_id")
+
+  @@map("user_favor_category")
+}
+
+model Store {
+  id        Int      @id @default(autoincrement())
+  name      String
+  address   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  reviews  UserStoreReview[]
+  missions Mission[]
+
+  @@map("store")
+}
+
+model UserStoreReview {
+  id        Int      @id @default(autoincrement())
+  body      String   @db.Text
+  score     Float
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // 관계 설정
+  user    User  @relation(fields: [userId], references: [id])
+  userId  Int   @map("user_id")
+  store   Store @relation(fields: [storeId], references: [id])
+  storeId Int   @map("store_id")
+
+  @@map("user_store_review")
+}
+
+model Mission {
+  id          Int      @id @default(autoincrement())
+  reward      Int // 예: 500P
+  deadline    DateTime // 미션 마감일
+  missionSpec String   @db.Text // 예: "12,000원 이상의 식사를 하세요!"
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // 관계 설정
+  store   Store @relation(fields: [storeId], references: [id])
+  storeId Int   @map("store_id")
+
+  memberMissions MemberMission[] // 유저가 도전 중인 상태를 추적하기 위함
+
+  @@map("mission")
+}
+
+// 3. 유저의 미션 수행 현황 모델 (신규 추가)
+model MemberMission {
+  id        Int      @id @default(autoincrement())
+  status    String   @default("CHALLENGING") // CHALLENGING(진행중), COMPLETE(진행완료)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 관계 설정
+  user      User    @relation(fields: [userId], references: [id])
+  userId    Int     @map("user_id")
+  mission   Mission @relation(fields: [missionId], references: [id])
+  missionId Int     @map("mission_id")
+
+  @@map("member_mission")
+}
