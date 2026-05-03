@@ -4,6 +4,14 @@ export interface MissionAddRequest {
   deadline?: number;
 }
 
+interface MissionRow {
+  id: number;
+  store_id: number;
+  content: string;
+  reward_point: number;
+  deadline: number | null;
+}
+
 export const bodyToMission = (storeId: number, body: MissionAddRequest) => {
   return {
     storeId,
@@ -13,7 +21,7 @@ export const bodyToMission = (storeId: number, body: MissionAddRequest) => {
   };
 };
 
-export const responseFromMission = ({ mission }: { mission: any }) => {
+export const responseFromMission = ({ mission }: { mission: MissionRow }) => {
   return {
     id: mission.id,
     storeId: mission.store_id,

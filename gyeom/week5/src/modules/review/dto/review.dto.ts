@@ -4,6 +4,14 @@ export interface ReviewAddRequest {
   content?: string;
 }
 
+interface ReviewRow {
+  id: number;
+  store_id: number;
+  user_id: number;
+  rating: number;
+  content: string | null;
+}
+
 export const bodyToReview = (storeId: number, body: ReviewAddRequest) => {
   return {
     storeId,
@@ -13,7 +21,7 @@ export const bodyToReview = (storeId: number, body: ReviewAddRequest) => {
   };
 };
 
-export const responseFromReview = ({ review }: { review: any }) => {
+export const responseFromReview = ({ review }: { review: ReviewRow }) => {
   return {
     id: review.id,
     storeId: review.store_id,
