@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { createUserMission } from "../services/mission.service.js";
+import { createUserMission, getMissions } from "../services/mission.service.js";
 
 export const handleChallengeMission = async (
   req: Request,
@@ -41,6 +41,50 @@ export const handleChallengeMission = async (
       statusCode: StatusCodes.CREATED,
       message: "도전 미션이 추가되었습니다.",
       data: mission,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const handleGetMissions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const storeId = Number(req.params.storeId);
+
+    // storeId 검증
+    if (!req.params.storeId || Number.isNaN(storeId)) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: "유효하지 않은 storeId 입니다.",
+        data: null,
+      });
+    }
+
+    const cursor = Number(req.query.cursor ?? 0);
+    const limit = Number(req.query.limit ?? 5);
+
+    // cursor, limit 검증
+    if (Number.isNaN(cursor) || Number.isNaN(limit) || limit < 1) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: "유효하지 않은 cursor 또는 limit 입니다.",
+        data: null,
+      });
+    }
+
+    const result = await getMissions(storeId, cursor, limit);
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "미션 목록 조회를 성공했습니다.",
+      data: result,
     });
   } catch (err) {
     next(err);

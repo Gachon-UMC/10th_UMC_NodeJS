@@ -1,3 +1,5 @@
+import { Prisma } from "../../../generated/prisma/client.js";
+
 export interface UserMissionResponse {
   id: number;
   createdAt: string;
@@ -11,5 +13,39 @@ export const responseFromUserMission = (
     id: mission.id,
     createdAt: mission.createdAt,
     updatedAt: mission.updatedAt,
+  };
+};
+
+export interface GetMissionResponse {
+  id: number;
+  storeName: string;
+  category: string;
+  description: string;
+  rewardPoint: number;
+  expireDate: string;
+}
+
+export interface GetMissionsResult {
+  missions: GetMissionResponse[];
+  totalPages: number;
+  hasNext: boolean;
+}
+
+export const responseFromMissions = (
+  missions: any[],
+  hasNext: boolean,
+  totalPages: number,
+): GetMissionsResult => {
+  return {
+    missions: missions.map((mission) => ({
+      id: Number(mission.id),
+      storeName: mission.store.name,
+      category: mission.store.storeType,
+      description: mission.description,
+      rewardPoint: Number(mission.rewardPoint),
+      expireDate: mission.expireDate!.toISOString().split("T")[0],
+    })),
+    hasNext,
+    totalPages,
   };
 };

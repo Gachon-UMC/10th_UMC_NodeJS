@@ -1,7 +1,13 @@
-import { responseFromUserMission } from "../dtos/mission.dto.js";
+import { getStoreById } from "../../stores/repositories/review.repository.js";
+import {
+  responseFromMissions,
+  responseFromUserMission,
+} from "../dtos/mission.dto.js";
 import {
   addUserMission,
+  countmissionsByStore,
   getMissionById,
+  getMissionsByStore,
   getUserMissionByMissionId,
 } from "../repositories/mission.repository.js";
 
@@ -32,4 +38,29 @@ export const createUserMission = async (userId: number, missionId: number) => {
     createdAt: userMission.createdAt.toISOString(),
     updatedAt: userMission.updatedAt.toISOString(),
   });
+};
+
+export const getMissions = async (
+  storeId: number,
+  cursor: number,
+  limit: number,
+) => {
+  const store = await getStoreById(storeId);
+
+  if (!store) {
+    const err = new Error("존재하지 않는 가게입니다.");
+    (err as any).statusCode = 404;
+    throw err;
+  }
+
+  const { missions, hasNext } = await getMissionsByStore(
+    storeId,
+    cursor,
+    limit,
+  );
+
+  const totalCount = await countmissionsByStore(storeId);
+  const totalPages = Math.ceil(totalCount / limit);
+
+  return responseFromMissions(missions, hasNext, totalPages);
 };

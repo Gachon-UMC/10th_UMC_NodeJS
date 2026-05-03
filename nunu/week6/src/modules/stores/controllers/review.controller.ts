@@ -84,11 +84,8 @@ export const handleGetMyReviews = async (
     const userId = 1; // 임시 userId
     const storeId = Number(req.params.storeId);
 
-    const cursor =
-      typeof req.query.cursor === "string" ? parseInt(req.query.cursor, 10) : 0; // 기본값 0
-
-    const limit =
-      typeof req.query.limit === "string" ? parseInt(req.query.limit, 10) : 5; // 기본값 5
+    const cursor = Number(req.query.cursor ?? 0);
+    const limit = Number(req.query.limit ?? 10);
 
     // userId 검증
     if (!userId) {
@@ -100,11 +97,22 @@ export const handleGetMyReviews = async (
       });
     }
 
+    // storeId 검증
     if (!req.params.storeId || Number.isNaN(storeId)) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
         statusCode: StatusCodes.BAD_REQUEST,
         message: "유효하지 않은 storeId 입니다.",
+        data: null,
+      });
+    }
+
+    // cursor, limit 검증
+    if (Number.isNaN(cursor) || Number.isNaN(limit) || limit < 1) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: "유효하지 않은 cursor 또는 limit 입니다.",
         data: null,
       });
     }
