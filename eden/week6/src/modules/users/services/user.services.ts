@@ -1,13 +1,12 @@
 import * as bcrypt from "bcrypt"; // bcrypt import
-import { responseFromChallenge, UserSignUpRequest } from "../dtos/user.dtos.js"; //인터페이스 가져오기 
+import { UserSignUpRequest } from "../dtos/user.dtos.js"; //인터페이스 가져오기 
 import { responseFromUser } from "../dtos/user.dtos.js";
 import {
   addUser,
-  challengeMission,
-  getMission,
+
   getUser,
   getUserPreferencesByUserId,
-  isMissionChallenged,
+ 
   setPreference,
 } from "../repositories/user.repository.js";
 
@@ -42,34 +41,3 @@ export const userSignUp = async (data: UserSignUpRequest) => {
   return responseFromUser({ user, preferences });
 };
 
-export const startMissionChallenge = async (userId: number, missionId: number) => {
-  // [추가] 1. 사용자 존재 여부 확인
-  const user = await getUser(userId); // user.repository 등에 정의된 함수
-  if (!user) {
-    const err = new Error("존재하지 않는 사용자입니다.");
-    (err as any).statusCode = 404; // Not Found
-    throw err;
-  }
-
-  // [추가] 2. 미션 존재 여부 확인
-  const mission = await getMission(missionId); // mission.repository 등에 정의된 함수
-  if (!mission) {
-    const err = new Error("존재하지 않는 미션입니다.");
-    (err as any).statusCode = 404; // Not Found
-    throw err;
-  }
-
-  // 3. 사용자가 이미 해당 미션에 도전 중인지 확인
-  const isAlreadyChallenged = await isMissionChallenged(userId, missionId);
-  if (isAlreadyChallenged) {
-    const err = new Error("이미 도전 중인 미션입니다.");
-    (err as any).statusCode = 409; // Conflict
-    throw err;
-  }
-
-  // 4. 모든 검증을 통과하면 미션 도전 추가
-  const newUserMissionId = await challengeMission(userId, missionId);
-
-  // 5. 매퍼를 사용하여 결과 반환
-  return responseFromChallenge(newUserMissionId);
-};

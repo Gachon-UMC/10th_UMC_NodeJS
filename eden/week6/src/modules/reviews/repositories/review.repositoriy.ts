@@ -1,8 +1,8 @@
 import { prisma } from "../../../db.config.js";
-import { StoreResponseDto } from "../dtos/review.dto.js";
+import { ReviewItem, StoreResponseDto } from "../dtos/review.dto.js";
 
 
-// 1. 리뷰를 데이터베이스에 추가하는 함수
+//  리뷰를 데이터베이스에 추가하는 함수
 export const addReview = async (storeId: number, userId: number, data: any): Promise<number> => {
   try {
     const newReview = await prisma.review.create({
@@ -14,14 +14,14 @@ export const addReview = async (storeId: number, userId: number, data: any): Pro
       },
     });
 
-    // 생성된 리뷰의 ID 반환 
+   
     return Number(newReview.id);
   } catch (err) {
     throw new Error(`리뷰 추가 중 오류 발생: ${err}`);
   }
 };
 
-// 2. ID로 가게 정보를 조회하는 함수 (JOIN 대체)
+//ID로 가게 정보를 조회하는 함수
 export const getStoreById = async (storeId: number): Promise <StoreResponseDto | null> => {
   try {
     const store = await prisma.store.findUnique({
@@ -71,3 +71,39 @@ export const getReviewsByUserId = async (userId: number) => {
         }
     });
 }
+export const getAllStoreReviews = async (
+    storeId: number,
+    cursor: number
+  ): Promise<ReviewItem[]> => {
+    const reviews = await prisma.review.findMany({
+      select: {
+        id: true,
+        comment: true,
+        
+        store: {
+          select: {
+            name: true,
+          }
+        },
+        
+        user: {
+          select: {
+            name: true,
+          }
+        },
+      },
+      where: {
+        store_id: storeId,
+        id: {
+          gt: cursor,
+        },
+      },
+      orderBy: {
+        id: "asc",
+      },
+      take: 5,
+    });
+  
+    
+return reviews as any as ReviewItem[];
+  };

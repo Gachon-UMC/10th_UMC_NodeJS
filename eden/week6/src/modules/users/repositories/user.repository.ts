@@ -33,9 +33,9 @@ export const addUser = async (data: any): Promise<number | null> => {
   }
 };
 
-// 사용자 정보 얻기 (이미 Prisma를 사용 중이시네요!)
+// 사용자 정보 얻기 
 export const getUser = async (userId: number) => {
-  // findFirstOrThrow는 데이터를 찾지 못하면 바로 에러를 던져서 편리합니다.
+
   return await prisma.user.findFirstOrThrow({ 
     where: { id: userId } 
   });
@@ -54,7 +54,7 @@ export const setPreference = async (userId: number, foodCategoryId: number) => {
 // 4. 사용자 선호 카테고리 반환
 export const getUserPreferencesByUserId = async (
   userId: number
-): Promise<UserPreferenceItemDto[]> => { // any[] 대신 DTO 사용
+): Promise<UserPreferenceItemDto[]> => { 
   try {
     const preferences = await prisma.userFavorCategory.findMany({
       where: {
@@ -80,58 +80,4 @@ export const getUserPreferencesByUserId = async (
 };
 
 
-// 사용자가 특정 미션에 이미 도전 중인지 확인하는 함수
-export const isMissionChallenged = async (userId: number, missionId: number): Promise<boolean> => {
-  try {
-  
-    const count = await prisma.user_mission.count({
-      where: {
-        user_id: userId,
-        mission_id: missionId,
-        status: 'challenging',
-      },
-    });
-
-  
-    return count > 0;
-  } catch (err) {
-    throw new Error(`미션 도전 여부 확인 중 오류 발생: ${err}`);
-  }
-};
-
-// 사용자의 미션 도전을 데이터베이스에 추가하는 함수
-
-export const challengeMission = async (userId: number, missionId: number): Promise<number> => {
-  try {
-    const newUserMission = await prisma.user_mission.create({
-      data: {
-        user_id: userId,
-        mission_id: missionId,
-        status: 'challenging', 
-      },
-    });
-
-   
-    return Number(newUserMission.id);
-  } catch (err) {
-   
-    throw new Error(`미션 도전 추가 중 오류 발생: ${err}`);
-  }
-};
-export const getMission = async (missionId: number): Promise<any | null> => {
-  try {
-   
-    const mission = await prisma.mission.findFirst({
-      where: {
-        id: missionId,
-      },
-    });
-
-   
-    return mission;
-  } catch (err) {
-  
-    throw new Error(`미션 조회 중 오류 발생: ${err}`);
-  }
-};
 

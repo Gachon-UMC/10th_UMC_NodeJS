@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { AddReviewRequestDTO } from "../dtos/review.dto";
-import { createReview } from "../services/review.service";
+import { createReview, listStoreReviews } from "../services/review.service";
 
 import { listMyReviews } from "../services/review.service.js";
 
@@ -57,3 +57,22 @@ export const handleListMyReviews = async (req: Request, res: Response) => {
         return res.status(500).send("서버 내부 오류 발생");
     }
 }
+export const handleListStoreReviews = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const storeId = parseInt(req.params.storeId as string, 10);
+    const cursor =
+    typeof req.query.cursor === "string"
+      ? parseInt(req.query.cursor, 10)
+      : 0;
+
+    const reviews = await listStoreReviews(storeId, cursor);
+
+    res.status(StatusCodes.OK).json(reviews);
+  } catch (err) {
+    next(err);
+  }
+};

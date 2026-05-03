@@ -41,3 +41,30 @@ export const responseFromMyReviews = (data: any[]): ListMyReviewsResponse => {
         }
     }));
 }
+export const responseFromReviews = (
+reviews: ReviewItem[]): ReviewListResponse => {
+    const lastReview = reviews[reviews.length - 1];
+  
+    return {
+      data: reviews,
+      pagination: {
+        cursor: lastReview ? lastReview.id : null,
+      },
+    };
+  };
+export interface ReviewItem {
+  id: number;
+  comment: string;
+  store: {
+    name: string;
+  };
+  user: {
+    name: string;
+  };
+}
+export interface ReviewListResponse {
+  data: ReviewItem[];
+  pagination: {
+    cursor: number | null; // 다음 페이지를 위한 커서 (마지막 리뷰의 ID)
+  };
+}

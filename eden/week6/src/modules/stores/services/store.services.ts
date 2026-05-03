@@ -1,5 +1,5 @@
-import { AddStoreRequestDTO, responseFromReviews, responseFromStore, ReviewListResponse } from "../dtos/store.dtos.js";
-import {  addStore, getAllStoreReviews, getStoreById} from "../repositories/store.repositories.js";
+import { AddStoreRequestDTO, responseFromStore } from "../dtos/store.dtos.js";
+import {  addStore,  getStoreById} from "../repositories/store.repositories.js";
 
 export const createStore = async (regionId: number, storeData: AddStoreRequestDTO) => {
   const { name, foodCategory } = storeData;
@@ -16,8 +16,3 @@ export const createStore = async (regionId: number, storeData: AddStoreRequestDT
 
 
 
-export const listStoreReviews = async (
-storeId: number, cursor: number): Promise<ReviewListResponse> => {
-  const reviews = await getAllStoreReviews(storeId, cursor);
-  return responseFromReviews(reviews);
-};
