@@ -44,14 +44,26 @@ export interface GetReviewResponse {
   createdAt: string;
 }
 
-export const responseFromReviewList = (
+export interface GetReviewsResult {
+  reviews: GetReviewResponse[];
+  totalPages: number;
+  hasNext: boolean;
+}
+
+export const responseFromReviews = (
   reviews: ReviewWithUserName[],
-): GetReviewResponse[] => {
-  return reviews.map((review) => ({
-    id: Number(review.id),
-    content: review.content,
-    starRate: Number(review.starRate),
-    userName: review.user.name,
-    createdAt: review.createdAt.toISOString(),
-  }));
+  hasNext: boolean,
+  totalPages: number,
+): GetReviewsResult => {
+  return {
+    reviews: reviews.map((review) => ({
+      id: Number(review.id),
+      content: review.content,
+      starRate: Number(review.starRate),
+      userName: review.user.name,
+      createdAt: review.createdAt.toISOString(),
+    })),
+    hasNext,
+    totalPages,
+  };
 };

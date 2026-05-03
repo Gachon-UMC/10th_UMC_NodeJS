@@ -84,6 +84,8 @@ export const handleGetMyReviews = async (
     const userId = 1; // 임시
 
     const storeId = Number(req.params.storeId);
+    const cursor =
+      typeof req.query.cursor === "string" ? parseInt(req.query.cursor, 10) : 0;
 
     // userId 검증
     if (!userId) {
@@ -104,15 +106,13 @@ export const handleGetMyReviews = async (
       });
     }
 
-    const reviews = await getMyReviews(userId, storeId);
+    const reviews = await getMyReviews(userId, storeId, cursor);
 
     return res.status(StatusCodes.OK).json({
       success: true,
       statusCode: StatusCodes.OK,
       message: "내 리뷰 목록 조회를 성공했습니다.",
-      data: {
-        reviews,
-      },
+      data: reviews,
     });
   } catch (err) {
     next(err);

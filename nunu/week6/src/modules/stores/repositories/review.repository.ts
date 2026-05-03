@@ -30,11 +30,18 @@ export const getStoreById = async (storeId: number) => {
   });
 };
 
-export const getMyReviewsByStore = async (userId: number, storeId: number) => {
-  return await prisma.review.findMany({
+export const getMyReviewsByStore = async (
+  userId: number,
+  storeId: number,
+  cursor: number,
+) => {
+  const reviews = await prisma.review.findMany({
     where: {
-      userId: userId,
-      storeId: storeId,
+      userId,
+      storeId,
+      id: {
+        gt: cursor,
+      },
     },
     select: {
       id: true,
@@ -49,6 +56,24 @@ export const getMyReviewsByStore = async (userId: number, storeId: number) => {
     },
     orderBy: {
       id: "asc",
+    },
+    take: 6, // ⭐ 5개 + 1개
+  });
+
+  const hasNext = reviews.length > 5;
+
+  return {
+    reviews: hasNext ? reviews.slice(0, 5) : reviews,
+    hasNext,
+  };
+};
+
+// totalPages 계산
+export const countReviewsByStore = async (userId: number, storeId: number) => {
+  return await prisma.review.count({
+    where: {
+      userId,
+      storeId,
     },
   });
 };

@@ -1,7 +1,11 @@
 import { CreateReviewRequest, responseFromReview } from "../dtos/review.dto.js";
-import { addReview, getStoreById } from "../repositories/review.repository.js";
+import {
+  addReview,
+  countReviewsByStore,
+  getStoreById,
+} from "../repositories/review.repository.js";
 import { getMyReviewsByStore } from "../repositories/review.repository.js";
-import { responseFromReviewList } from "../dtos/review.dto.js";
+import { responseFromReviews } from "../dtos/review.dto.js";
 
 export const createReview = async (
   userId: number,
@@ -26,8 +30,11 @@ export const createReview = async (
   });
 };
 
-export const getMyReviews = async (userId: number, storeId: number) => {
-  // 가게 존재 확인
+export const getMyReviews = async (
+  userId: number,
+  storeId: number,
+  cursor: number,
+) => {
   const store = await getStoreById(storeId);
 
   if (!store) {
@@ -36,7 +43,15 @@ export const getMyReviews = async (userId: number, storeId: number) => {
     throw err;
   }
 
-  const reviews = await getMyReviewsByStore(userId, storeId);
+  const { reviews, hasNext } = await getMyReviewsByStore(
+    userId,
+    storeId,
+    cursor,
+  );
 
-  return responseFromReviewList(reviews);
+  const totalCount = await countReviewsByStore(userId, storeId);
+  const pageSize = 5;
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  return responseFromReviews(reviews, hasNext, totalPages);
 };
