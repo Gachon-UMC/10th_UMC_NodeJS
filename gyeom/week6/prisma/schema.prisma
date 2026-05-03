@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model food_category {
+  id   BigInt @id
+  name String @db.VarChar(50)
+}
+
+model inquiry {
+  id         BigInt         @id
+  user_id    BigInt
+  title      String         @db.VarChar(100)
+  content    String?        @db.VarChar(500)
+  status     inquiry_status
+  created_at DateTime       @db.DateTime(6)
+  updated_at DateTime?      @db.DateTime(6)
+}
+
+model inquiry_image {
+  id          BigInt    @id
+  inquiry_id  BigInt
+  image_url   String    @db.VarChar(200)
+  image_order BigInt
+  created_at  DateTime? @db.DateTime(6)
+}
+
+model mission {
+  id           BigInt    @id @default(autoincrement())
+  store_id     BigInt
+  content      String    @db.VarChar(500)
+  reward_point BigInt
+  deadline     BigInt?
+  created_at   DateTime  @db.DateTime(6)
+  updated_at   DateTime? @db.DateTime(6)
+}
+
+model notification {
+  id         BigInt    @id
+  user_id    BigInt
+  review_id  BigInt?
+  mission_id BigInt?
+  type       String    @db.VarChar(500)
+  content    String    @db.VarChar(500)
+  is_read    Boolean?  @default(false)
+  created_at DateTime  @db.DateTime(6)
+  updated_at DateTime? @db.DateTime(6)
+}
+
+model point_history {
+  id              BigInt    @id
+  user_id         BigInt
+  type            String    @db.VarChar(500)
+  point           BigInt
+  store_name      String?   @db.VarChar(100)
+  mission_content String?   @db.VarChar(500)
+  created_at      DateTime  @db.DateTime(6)
+  updated_at      DateTime? @db.DateTime(6)
+}
+
+model region {
+  id   BigInt @id
+  name String @db.VarChar(100)
+}
+
+model review {
+  id         BigInt    @id @default(autoincrement())
+  store_id   BigInt
+  user_id    BigInt
+  rating     Decimal   @db.Decimal(3, 1)
+  content    String?   @db.Text
+  created_at DateTime  @db.DateTime(6)
+  updated_at DateTime? @db.DateTime(6)
+}
+
+model review_comment {
+  id         BigInt    @id
+  review_id  BigInt
+  content    String?   @db.Text
+  created_at DateTime  @db.DateTime(6)
+  updated_at DateTime? @db.DateTime(6)
+}
+
+model review_image {
+  id          BigInt    @id
+  review_id   BigInt
+  image_url   String    @db.VarChar(200)
+  image_order BigInt
+  created_at  DateTime? @db.DateTime(6)
+}
+
+model store {
+  id                   BigInt    @id @default(autoincrement())
+  name                 String    @db.VarChar(100)
+  food_category_id     BigInt
+  region_id            BigInt
+  address              String    @db.VarChar(255)
+  latitude             Decimal   @db.Decimal(18, 10)
+  longitude            Decimal   @db.Decimal(18, 10)
+  business_start_hours DateTime? @db.Time(0)
+  business_end_hours   DateTime? @db.Time(0)
+  created_at           DateTime  @db.DateTime(6)
+  updated_at           DateTime? @db.DateTime(6)
+}
+
+model store_image {
+  id          BigInt    @id
+  store_id    BigInt
+  image_url   String    @db.VarChar(200)
+  image_order BigInt
+  created_at  DateTime? @db.DateTime(6)
+}
+
+model user {
+  id                                 BigInt      @id
+  name                               String      @db.VarChar(50)
+  gender                             user_gender
+  birth_date                         DateTime    @db.Date
+  region_id                          BigInt
+  address                            String      @db.VarChar(100)
+  latitude                           Decimal     @db.Decimal(18, 10)
+  longitude                          Decimal     @db.Decimal(18, 10)
+  created_at                         DateTime    @db.DateTime(6)
+  point                              BigInt?     @default(0)
+  email                              String      @db.VarChar(255)
+  phone                              String?     @db.VarChar(50)
+  event_notification_enabled         Boolean?    @default(false)
+  review_reply_notification_enabled  Boolean?    @default(false)
+  inquiry_reply_notification_enabled Boolean?    @default(false)
+  deleted_at                         DateTime?   @db.DateTime(6)
+  updated_at                         DateTime?   @db.DateTime(6)
+}
+
+model user_food_category {
+  food_category_id BigInt
+  user_id          BigInt
+
+  @@id([food_category_id, user_id])
+}
+
+model user_mission {
+  id         BigInt    @id @default(autoincrement())
+  user_id    BigInt
+  mission_id BigInt
+  status     String    @db.VarChar(20)
+  created_at DateTime  @db.DateTime(6)
+  updated_at DateTime? @db.DateTime(6)
+}
+
+model user_region_mission_count {
+  user_id       BigInt
+  region_id     BigInt
+  mission_count BigInt? @default(0)
+
+  @@id([user_id, region_id])
+}
+
+enum user_gender {
+  MALE
+  FEMALE
+  NONE
+}
+
+enum inquiry_status {
+  WAITING
+  IN_PROGRESS
+  ANSWERED
+  DONE
+}
