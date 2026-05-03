@@ -34,6 +34,7 @@ export const getMyReviewsByStore = async (
   userId: number,
   storeId: number,
   cursor: number,
+  limit: number,
 ) => {
   const reviews = await prisma.review.findMany({
     where: {
@@ -57,13 +58,13 @@ export const getMyReviewsByStore = async (
     orderBy: {
       id: "asc",
     },
-    take: 6, // ⭐ 5개 + 1개
+    take: limit + 1,
   });
 
-  const hasNext = reviews.length > 5;
+  const hasNext = reviews.length > limit;
 
   return {
-    reviews: hasNext ? reviews.slice(0, 5) : reviews,
+    reviews: hasNext ? reviews.slice(0, limit) : reviews,
     hasNext,
   };
 };

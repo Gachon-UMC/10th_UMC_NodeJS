@@ -34,6 +34,7 @@ export const getMyReviews = async (
   userId: number,
   storeId: number,
   cursor: number,
+  limit: number,
 ) => {
   const store = await getStoreById(storeId);
 
@@ -47,11 +48,11 @@ export const getMyReviews = async (
     userId,
     storeId,
     cursor,
+    limit,
   );
 
   const totalCount = await countReviewsByStore(userId, storeId);
-  const pageSize = 5;
-  const totalPages = Math.ceil(totalCount / pageSize);
+  const totalPages = Math.ceil(totalCount / limit);
 
   return responseFromReviews(reviews, hasNext, totalPages);
 };
