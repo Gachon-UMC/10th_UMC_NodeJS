@@ -1,5 +1,6 @@
 import { getStoreById } from "../../stores/repositories/review.repository.js";
 import {
+  responseFromCompletedMission,
   responseFromMissions,
   responseFromUserMission,
 } from "../dtos/mission.dto.js";
@@ -9,6 +10,7 @@ import {
   getMissionById,
   getMissionsByStore,
   getUserMissionByMissionId,
+  updateUserMissionStatus,
 } from "../repositories/mission.repository.js";
 
 export const createUserMission = async (userId: number, missionId: number) => {
@@ -63,4 +65,31 @@ export const getMissions = async (
   const totalPages = Math.ceil(totalCount / limit);
 
   return responseFromMissions(missions, hasNext, totalPages);
+};
+
+export const completeUserMission = async (
+  userId: number,
+  missionId: number,
+) => {
+  // 존재 여부 확인
+  const existing = await getUserMissionByMissionId(userId, missionId);
+
+  if (!existing) {
+    const err = new Error("해당 미션을 도전한 기록이 없습니다.");
+    (err as any).statusCode = 404;
+    throw err;
+  }
+
+  // 이미 완료된 경우
+  if (existing.status === 1) {
+    const err = new Error("이미 완료된 미션입니다.");
+    (err as any).statusCode = 409;
+    throw err;
+  }
+
+  await updateUserMissionStatus(userId, missionId);
+
+  const result = responseFromCompletedMission(missionId);
+
+  return result;
 };

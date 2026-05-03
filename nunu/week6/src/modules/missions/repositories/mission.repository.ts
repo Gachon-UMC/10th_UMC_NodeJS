@@ -83,3 +83,19 @@ export const countmissionsByStore = async (storeId: number) => {
     },
   });
 };
+
+export const updateUserMissionStatus = async (
+  userId: number,
+  missionId: number,
+) => {
+  return await prisma.userMission.updateMany({
+    where: {
+      userId,
+      missionId,
+      status: 0, // 진행중인 것만 완료로 변경 가능
+    },
+    data: {
+      status: 1,
+    },
+  });
+};

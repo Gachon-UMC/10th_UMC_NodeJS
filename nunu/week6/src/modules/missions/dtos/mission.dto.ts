@@ -1,5 +1,3 @@
-import { Prisma } from "../../../generated/prisma/client.js";
-
 export interface UserMissionResponse {
   id: number;
   createdAt: string;
@@ -47,5 +45,19 @@ export const responseFromMissions = (
     })),
     hasNext,
     totalPages,
+  };
+};
+
+export interface CompleteUserMissionResponse {
+  missionId: number;
+  isCompleted: boolean;
+}
+
+export const responseFromCompletedMission = (
+  missionId: number,
+): CompleteUserMissionResponse => {
+  return {
+    missionId,
+    isCompleted: true,
   };
 };

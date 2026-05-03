@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { createUserMission, getMissions } from "../services/mission.service.js";
+import {
+  completeUserMission,
+  createUserMission,
+  getMissions,
+} from "../services/mission.service.js";
 
 export const handleChallengeMission = async (
   req: Request,
@@ -84,6 +88,39 @@ export const handleGetMissions = async (
       success: true,
       statusCode: StatusCodes.OK,
       message: "미션 목록 조회를 성공했습니다.",
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const handleCompleteMission = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const userId = 1; // 임시 userId
+    const missionId = Number(req.params.missionId);
+
+    console.log(userId, missionId);
+
+    if (!missionId || Number.isNaN(missionId)) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        StatusCodes: StatusCodes.BAD_REQUEST,
+        message: "유효하지 않은 missionId 입니다.",
+        data: null,
+      });
+    }
+
+    const result = await completeUserMission(userId, missionId);
+
+    return res.status(StatusCodes.OK).json({
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: "미션이 완료 처리되었습니다.",
       data: result,
     });
   } catch (err) {
