@@ -77,6 +77,22 @@ export const getUserMissionsByUserId=async(userId:number)=>{
     }
   })
 }
+//유저 아이디로 완료한 미션 목록 조회
+export const getUserCompletedMissionsByUserId=async(userId:number)=>{
+  return await prisma.user_mission.findMany({
+    where:{
+      user_id:userId,
+      status:"completed",
+    },
+    include:{
+      mission:{
+        include:{
+          store:true,
+        }
+      }
+    }
+  })
+}
 // 사용자가 특정 미션에 이미 도전 중인지 확인하는 함수
 export const isMissionChallenged = async (userId: number, missionId: number): Promise<boolean> => {
   try {
@@ -95,6 +111,43 @@ export const isMissionChallenged = async (userId: number, missionId: number): Pr
     throw new Error(`미션 도전 여부 확인 중 오류 발생: ${err}`);
   }
 };
+//사용자가 특정 미션에 도전중인지 확인하는 함수
+export const getChallengingMission = async (userId: number, missionId: number) => {
+  try {
+  
+    const mission = await prisma.user_mission.findFirst({
+      where: {
+        user_id: userId,
+        mission_id: missionId,
+        status: 'challenging',
+      },
+    });
+
+  
+    return mission;
+  } catch (err) {
+    throw new Error(`미션 도전 여부 확인 중 오류 발생: ${err}`);
+  }
+}
+//사용자가 미션을 완료하는 함수
+export const completeMissionChallenge = async (userId: number, missionId: number): Promise<number> => {
+  try{
+    await prisma.user_mission.updateMany({
+      where: {
+        user_id: userId,
+        mission_id: missionId,
+        status: "challenging"
+      },
+      data: {
+        status: "completed"
+      }
+    })
+    return missionId;
+  }
+  catch(err){
+    throw new Error(`미션 완료 중 오류 발생: ${err}`);
+  }
+}
 
 // 사용자의 미션 도전을 데이터베이스에 추가하는 함수
 
