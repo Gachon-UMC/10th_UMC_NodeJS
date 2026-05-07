@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import {
   completeUserMission,
-  createUserMission,
+  createChallangeMission,
   getMissions,
 } from "../services/mission.service.js";
 
@@ -19,7 +19,7 @@ export const handleChallengeMission = async (
     const missionId = Number(req.params.missionId);
 
     // missionId 검증
-    if (!req.params.missionId || Number.isNaN(missionId)) {
+    if (!missionId || Number.isNaN(missionId)) {
       return res.status(StatusCodes.BAD_REQUEST).json({
         success: false,
         statusCode: StatusCodes.BAD_REQUEST,
@@ -38,7 +38,7 @@ export const handleChallengeMission = async (
       });
     }
 
-    const mission = await createUserMission(userId, missionId);
+    const mission = await createChallangeMission(userId, missionId);
 
     res.status(StatusCodes.CREATED).json({
       success: true,
@@ -105,6 +105,16 @@ export const handleCompleteMission = async (
     const missionId = Number(req.params.missionId);
 
     console.log(userId, missionId);
+
+    // userId 검증
+    if (!userId) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        success: false,
+        statusCode: StatusCodes.UNAUTHORIZED,
+        message: "사용자 정보가 없습니다.",
+        data: null,
+      });
+    }
 
     if (!missionId || Number.isNaN(missionId)) {
       return res.status(StatusCodes.BAD_REQUEST).json({

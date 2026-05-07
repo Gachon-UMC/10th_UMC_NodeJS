@@ -13,7 +13,10 @@ import {
   updateUserMissionStatus,
 } from "../repositories/mission.repository.js";
 
-export const createUserMission = async (userId: number, missionId: number) => {
+export const createChallangeMission = async (
+  userId: number,
+  missionId: number,
+) => {
   // 미션 존재 확인
   const mission = await getMissionById(missionId);
 

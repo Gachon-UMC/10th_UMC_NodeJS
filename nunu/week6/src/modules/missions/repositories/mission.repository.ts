@@ -3,8 +3,8 @@ import { prisma } from "../../../db.config.js";
 export const addUserMission = async (userId: number, missionId: number) => {
   const created = await prisma.userMission.create({
     data: {
-      userId: userId,
-      missionId: missionId,
+      userId,
+      missionId,
       status: 0, // 0: 진행중, 1: 완료
     },
     select: {

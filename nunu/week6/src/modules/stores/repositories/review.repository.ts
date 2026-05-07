@@ -6,12 +6,14 @@ export const addReview = async (
   storeId: number,
   data: CreateReviewRequest,
 ) => {
+  const { content, starRate } = data;
+
   const created = await prisma.review.create({
     data: {
-      userId: userId,
-      storeId: storeId,
-      content: data.content,
-      starRate: data.starRate,
+      userId,
+      storeId,
+      content,
+      starRate,
     },
     select: {
       id: true,
@@ -25,7 +27,7 @@ export const addReview = async (
 
 // 가게 존재 확인
 export const getStoreById = async (storeId: number) => {
-  return await prisma.store.findFirst({
+  return await prisma.store.findUnique({
     where: { id: storeId },
   });
 };
@@ -40,9 +42,11 @@ export const getMyReviewsByStore = async (
     where: {
       userId,
       storeId,
-      id: {
-        gt: cursor,
-      },
+      ...(cursor && {
+        id: {
+          gt: cursor,
+        },
+      }),
     },
     select: {
       id: true,

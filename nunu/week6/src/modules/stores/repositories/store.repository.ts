@@ -3,11 +3,12 @@ import { CreateStoreRequest } from "../dtos/store.dto.js";
 
 // 가게 생성
 export const addStore = async (data: CreateStoreRequest) => {
-  const created = await prisma.store.create({
+  const { name, storeType, regionId } = data;
+  return await prisma.store.create({
     data: {
-      name: data.name,
-      storeType: data.storeType,
-      regionId: data.regionId,
+      name,
+      storeType,
+      regionId,
     },
     select: {
       id: true,
@@ -15,8 +16,6 @@ export const addStore = async (data: CreateStoreRequest) => {
       updatedAt: true,
     },
   });
-
-  return created;
 };
 
 // 지역 존재 확인
