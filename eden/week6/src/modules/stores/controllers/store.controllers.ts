@@ -1,0 +1,32 @@
+import { Request, Response, NextFunction } from "express";
+import { StatusCodes } from "http-status-codes";
+import { createStore } from "../services/store.services.js";
+import { AddStoreRequestDTO } from "../dtos/store.dtos.js";
+
+
+export const handleAddStore = async (req: Request, res: Response, next: NextFunction) => {
+ 
+const { regionId: rawRegionId } = req.params;
+
+if (typeof rawRegionId !== 'string') {
+  
+  return res.status(400).json({ message: "유효하지 않은 지역 ID입니다." });
+}
+
+const regionId = parseInt(rawRegionId, 10);
+ 
+  const storeData: AddStoreRequestDTO = req.body;
+
+  console.log(`'${regionId}' 지역에 가게 추가를 요청했습니다.`);
+  console.log("body:", storeData);
+
+  try {
+    const newStore = await createStore(regionId, storeData);
+   
+    return res.status(StatusCodes.CREATED).json({ result : newStore });
+  } catch (err) {
+    next(err); 
+  }
+};
+
+
