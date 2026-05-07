@@ -104,7 +104,15 @@ export const handleCompleteMission = async (
     const userId = 1; // 임시 userId
     const missionId = Number(req.params.missionId);
 
-    console.log(userId, missionId);
+    // userId 검증
+    if (!userId) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        success: false,
+        statusCode: StatusCodes.UNAUTHORIZED,
+        message: "사용자 정보가 없습니다.",
+        data: null,
+      });
+    }
 
     // userId 검증
     if (!userId) {
