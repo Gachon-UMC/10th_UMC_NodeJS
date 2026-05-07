@@ -74,9 +74,9 @@ export const completeUserMission = async (
   userId: number,
   missionId: number,
 ) => {
-  // 존재 여부 확인
   const existing = await getUserMissionByMissionId(userId, missionId);
 
+  // 존재 여부 확인
   if (!existing) {
     const err = new Error("해당 미션을 도전한 기록이 없습니다.");
     (err as any).statusCode = 404;

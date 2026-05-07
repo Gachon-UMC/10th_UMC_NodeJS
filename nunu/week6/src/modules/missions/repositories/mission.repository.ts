@@ -45,9 +45,11 @@ export const getMissionsByStore = async (
   const missions = await prisma.mission.findMany({
     where: {
       storeId,
-      id: {
-        gt: cursor,
-      },
+      ...(cursor && {
+        id: {
+          gt: cursor,
+        },
+      }),
     },
     select: {
       id: true,
