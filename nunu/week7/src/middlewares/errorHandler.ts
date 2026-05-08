@@ -1,19 +1,27 @@
 import { Request, Response, NextFunction } from "express";
+import { AppError } from "../common/errors.js";
 
 const errorHandler = (
-  err: any,
+  err: Error,
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  console.error("Error:", err);
+  console.error(err);
 
-  const statusCode = err.statusCode || 500;
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).json({
+      success: false,
+      statusCode: err.statusCode,
+      message: err.message,
+      data: null,
+    });
+  }
 
-  res.status(statusCode).json({
+  return res.status(500).json({
     success: false,
-    statusCode: statusCode,
-    message: err.message || "서버 오류가 발생했습니다.",
+    statusCode: 500,
+    message: "서버 오류가 발생했습니다.",
     data: null,
   });
 };

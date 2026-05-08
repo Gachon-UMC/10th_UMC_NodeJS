@@ -14,6 +14,8 @@ import { UserSignUpRequest } from "../dtos/user.dto.js";
 import { userSignUp } from "../services/user.service.js";
 import { authorizeUser } from "../../../middlewares/auth.middleware.js";
 import { Request as ExpressRequest } from "express";
+import { success } from "../../../common/responses.js";
+import { AppError } from "../../../common/errors.js";
 
 @Route("users")
 @Tags("User")
@@ -28,50 +30,32 @@ export class UserController extends Controller {
 
     // 이메일 형식 검사
     if (!emailRegex.test(data.email)) {
-      this.setStatus(StatusCodes.BAD_REQUEST);
-
-      return {
-        success: false,
-        statusCode: StatusCodes.BAD_REQUEST,
-        message: "올바르지 않은 이메일 형식입니다.",
-        data: null,
-      };
+      throw new AppError(
+        "올바르지 않은 이메일 형식입니다.",
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     // 비밀번호 형식 검사
     if (!data.password || data.password.length < 6) {
-      this.setStatus(StatusCodes.BAD_REQUEST);
-
-      return {
-        success: false,
-        statusCode: StatusCodes.BAD_REQUEST,
-        message: "비밀번호는 6자 이상이어야 합니다.",
-        data: null,
-      };
+      throw new AppError(
+        "비밀번호는 6자 이상이어야 합니다.",
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     // preferences 존재 여부
     if (!data.preferences || data.preferences.length === 0) {
-      this.setStatus(StatusCodes.BAD_REQUEST);
-
-      return {
-        success: false,
-        statusCode: StatusCodes.BAD_REQUEST,
-        message: "선호 카테고리를 최소 1개 선택해야 합니다.",
-        data: null,
-      };
+      throw new AppError(
+        "선호 카테고리를 최소 1개 선택해야 합니다.",
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const user = await userSignUp(data);
 
     this.setStatus(StatusCodes.CREATED);
-
-    return {
-      success: true,
-      statusCode: StatusCodes.CREATED,
-      message: "회원가입이 완료되었습니다.",
-      data: user,
-    };
+    return success(user, "회원가입이 완료되었습니다.", 201);
   }
 
   @Get("guest")
