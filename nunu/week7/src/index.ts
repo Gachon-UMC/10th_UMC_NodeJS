@@ -3,11 +3,13 @@ import express, { Express, Request, Response } from "express";
 import cors from "cors";
 import errorHandler from "./middlewares/errorHandler.js";
 import { RegisterRoutes } from "./generated/routes.js";
+import morgan from "morgan";
 
 // 1. 환경 변수 설정
 dotenv.config();
 
 const app: Express = express();
+app.use(morgan("dev")); // 로그 포맷: dev
 const port = process.env.PORT || 3000;
 
 // 2. 미들웨어 설정
@@ -19,6 +21,10 @@ app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형
 // 3. 기본 라우트
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World! This is TypeScript Server!");
+});
+
+app.get("/test", (req, res) => {
+  res.send("Hello!");
 });
 
 // 4. API 라우트
