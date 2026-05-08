@@ -6,6 +6,8 @@ import {
 } from "../repositories/review.repository.js";
 import { getMyReviewsByStore } from "../repositories/review.repository.js";
 import { responseFromReviews } from "../dtos/review.dto.js";
+import { AppError } from "../../../common/errors.js";
+import { StatusCodes } from "http-status-codes";
 
 export const createReview = async (
   userId: number,
@@ -16,9 +18,7 @@ export const createReview = async (
   const store = await getStoreById(storeId);
 
   if (!store) {
-    const err = new Error("존재하지 않는 가게입니다.");
-    (err as any).statusCode = 404;
-    throw err;
+    throw new AppError("존재하지 않는 가게입니다.", StatusCodes.NOT_FOUND);
   }
 
   const review = await addReview(userId, storeId, data);
@@ -39,9 +39,7 @@ export const getMyReviews = async (
   const store = await getStoreById(storeId);
 
   if (!store) {
-    const err = new Error("존재하지 않는 가게입니다.");
-    (err as any).statusCode = 404;
-    throw err;
+    throw new AppError("존재하지 않는 가게입니다.", StatusCodes.NOT_FOUND);
   }
 
   const { reviews, hasNext } = await getMyReviewsByStore(
