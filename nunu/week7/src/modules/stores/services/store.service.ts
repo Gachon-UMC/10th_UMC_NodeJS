@@ -1,3 +1,5 @@
+import { StatusCodes } from "http-status-codes";
+import { AppError } from "../../../common/errors.js";
 import { responseFromStore, CreateStoreRequest } from "../dtos/store.dto.js";
 import { addStore, getRegionById } from "../repositories/store.repository.js";
 
@@ -6,9 +8,7 @@ export const createStore = async (data: CreateStoreRequest) => {
   const region = await getRegionById(data.regionId);
 
   if (!region) {
-    const err = new Error("존재하지 않는 지역입니다.");
-    (err as any).statusCode = 404;
-    throw err;
+    throw new AppError("존재하지 않는 지역입니다.", StatusCodes.NOT_FOUND);
   }
 
   // DB 저장

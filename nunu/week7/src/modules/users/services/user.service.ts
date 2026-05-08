@@ -1,3 +1,5 @@
+import { StatusCodes } from "http-status-codes";
+import { AppError } from "../../../common/errors.js";
 import { responseFromUser, UserSignUpRequest } from "../dtos/user.dto.js"; //인터페이스 가져오기
 
 import {
@@ -23,9 +25,7 @@ export const userSignUp = async (data: UserSignUpRequest) => {
 
   // 이메일 중복
   if (joinUserId === null) {
-    const err = new Error("이미 존재하는 이메일입니다.");
-    (err as any).statusCode = 409;
-    throw err;
+    throw new AppError("이미 존재하는 이메일입니다.", StatusCodes.BAD_REQUEST);
   }
 
   for (const preference of data.preferences) {
