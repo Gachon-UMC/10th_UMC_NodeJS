@@ -1,0 +1,28 @@
+import { responseFromStore, CreateStoreRequest } from "../dtos/store.dto.js";
+import { addStore, getRegionById } from "../repositories/store.repository.js";
+
+export const createStore = async (data: CreateStoreRequest) => {
+  // region 존재 확인
+  const region = await getRegionById(data.regionId);
+
+  if (!region) {
+    const err = new Error("존재하지 않는 지역입니다.");
+    (err as any).statusCode = 404;
+    throw err;
+  }
+
+  // DB 저장
+  const store = await addStore({
+    name: data.name,
+    storeType: data.storeType,
+    regionId: data.regionId,
+  });
+
+  // 응답 데이터 구성
+  return responseFromStore({
+    id: Number(store.id),
+    name: data.name,
+    createdAt: store.createdAt.toISOString(),
+    updatedAt: store.updatedAt.toISOString(),
+  });
+};
