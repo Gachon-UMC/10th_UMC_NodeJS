@@ -1,147 +1,103 @@
-import { Request, Response, NextFunction } from "express";
+import {
+  Controller,
+  Get,
+  Patch,
+  Path,
+  Post,
+  Query,
+  Route,
+  SuccessResponse,
+  Tags,
+} from "tsoa";
 import { StatusCodes } from "http-status-codes";
 import {
   completeUserMission,
   createChallangeMission,
   getMissions,
 } from "../services/mission.service.js";
+import { AppError } from "../../../common/errors.js";
+import { success } from "../../../common/responses.js";
 
-export const handleChallengeMission = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
+@Route("missions")
+@Tags("Mission")
+export class MissionController extends Controller {
+  @SuccessResponse(StatusCodes.CREATED, "도전 미션 추가 성공")
+  @Post("{missionId}/challenge")
+  public async handleChallengeMission(@Path() missionId: number) {
     console.log("도전 미션 추가를 요청했습니다!");
 
-    const userId = 1; // 첫 번째 유저로 고정 (인증 기능이 없으므로)
-
-    const missionId = Number(req.params.missionId);
+    const userId = 1;
 
     // missionId 검증
     if (!missionId || Number.isNaN(missionId)) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        success: false,
-        statusCode: StatusCodes.BAD_REQUEST,
-        message: "유효하지 않은 missionId 입니다.",
-        data: null,
-      });
+      throw new AppError(
+        "유효하지 않은 missionId 입니다.",
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     // userId 검증
     if (!userId) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-        success: false,
-        statusCode: StatusCodes.UNAUTHORIZED,
-        message: "사용자 정보가 없습니다.",
-        data: null,
-      });
+      throw new AppError("사용자 정보가 없습니다.", StatusCodes.UNAUTHORIZED);
     }
 
     const mission = await createChallangeMission(userId, missionId);
 
-    res.status(StatusCodes.CREATED).json({
-      success: true,
-      statusCode: StatusCodes.CREATED,
-      message: "도전 미션이 추가되었습니다.",
-      data: mission,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
+    this.setStatus(StatusCodes.CREATED);
 
-export const handleGetMissions = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const storeId = Number(req.params.storeId);
+    return success(mission, "도전 미션이 추가되었습니다.", StatusCodes.CREATED);
+  }
+
+  @Get("stores/{storeId}/missions")
+  public async handleGetMissions(
+    @Path() storeId: number,
+    @Query() cursor: number = 0,
+    @Query() limit: number = 5,
+  ) {
+    console.log("미션 목록 조회를 요청했습니다!");
 
     // storeId 검증
-    if (!req.params.storeId || Number.isNaN(storeId)) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        success: false,
-        statusCode: StatusCodes.BAD_REQUEST,
-        message: "유효하지 않은 storeId 입니다.",
-        data: null,
-      });
+    if (!storeId || Number.isNaN(storeId)) {
+      throw new AppError(
+        "유효하지 않은 storeId 입니다.",
+        StatusCodes.BAD_REQUEST,
+      );
     }
-
-    const cursor = Number(req.query.cursor ?? 0);
-    const limit = Number(req.query.limit ?? 5);
 
     // cursor, limit 검증
     if (Number.isNaN(cursor) || Number.isNaN(limit) || limit < 1) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        success: false,
-        statusCode: StatusCodes.BAD_REQUEST,
-        message: "유효하지 않은 cursor 또는 limit 입니다.",
-        data: null,
-      });
+      throw new AppError(
+        "유효하지 않은 cursor 또는 limit 입니다.",
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const result = await getMissions(storeId, cursor, limit);
 
-    return res.status(StatusCodes.OK).json({
-      success: true,
-      statusCode: StatusCodes.OK,
-      message: "미션 목록 조회를 성공했습니다.",
-      data: result,
-    });
-  } catch (err) {
-    next(err);
+    return success(result, "미션 목록 조회를 성공했습니다.", StatusCodes.OK);
   }
-};
 
-export const handleCompleteMission = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const userId = 1; // 임시 userId
-    const missionId = Number(req.params.missionId);
+  @Patch("{missionId}/complete")
+  public async handleCompleteMission(@Path() missionId: number) {
+    console.log("미션 완료를 요청했습니다!");
+
+    const userId = 1;
 
     // userId 검증
     if (!userId) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-        success: false,
-        statusCode: StatusCodes.UNAUTHORIZED,
-        message: "사용자 정보가 없습니다.",
-        data: null,
-      });
+      throw new AppError("사용자 정보가 없습니다.", StatusCodes.UNAUTHORIZED);
     }
 
-    // userId 검증
-    if (!userId) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-        success: false,
-        statusCode: StatusCodes.UNAUTHORIZED,
-        message: "사용자 정보가 없습니다.",
-        data: null,
-      });
-    }
-
+    // missionId 검증
     if (!missionId || Number.isNaN(missionId)) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        success: false,
-        StatusCodes: StatusCodes.BAD_REQUEST,
-        message: "유효하지 않은 missionId 입니다.",
-        data: null,
-      });
+      throw new AppError(
+        "유효하지 않은 missionId 입니다.",
+        StatusCodes.BAD_REQUEST,
+      );
     }
 
     const result = await completeUserMission(userId, missionId);
 
-    return res.status(StatusCodes.OK).json({
-      success: true,
-      statusCode: StatusCodes.OK,
-      message: "미션이 완료 처리되었습니다.",
-      data: result,
-    });
-  } catch (err) {
-    next(err);
+    return success(result, "미션이 완료 처리되었습니다.", StatusCodes.OK);
   }
-};
+}

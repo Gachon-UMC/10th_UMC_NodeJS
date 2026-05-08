@@ -1,3 +1,5 @@
+import { StatusCodes } from "http-status-codes";
+import { AppError } from "../../../common/errors.js";
 import { getStoreById } from "../../stores/repositories/review.repository.js";
 import {
   responseFromCompletedMission,
@@ -21,18 +23,14 @@ export const createChallangeMission = async (
   const mission = await getMissionById(missionId);
 
   if (!mission) {
-    const err = new Error("존재하지 않는 미션입니다.");
-    (err as any).statusCode = 404;
-    throw err;
+    throw new AppError("존재하지 않는 미션입니다.", StatusCodes.NOT_FOUND);
   }
 
   // 이미 도전 중인 미션인지 확인
   const existingMission = await getUserMissionByMissionId(userId, missionId);
 
   if (existingMission) {
-    const err = new Error("이미 도전 중인 미션입니다.");
-    (err as any).statusCode = 409;
-    throw err;
+    throw new AppError("이미 도전 중인 미션입니다.", StatusCodes.CONFLICT);
   }
 
   // 생성
@@ -53,9 +51,7 @@ export const getMissions = async (
   const store = await getStoreById(storeId);
 
   if (!store) {
-    const err = new Error("존재하지 않는 가게입니다.");
-    (err as any).statusCode = 404;
-    throw err;
+    throw new AppError("존재하지 않는 가게입니다.", StatusCodes.NOT_FOUND);
   }
 
   const { missions, hasNext } = await getMissionsByStore(
@@ -78,16 +74,15 @@ export const completeUserMission = async (
 
   // 존재 여부 확인
   if (!existing) {
-    const err = new Error("해당 미션을 도전한 기록이 없습니다.");
-    (err as any).statusCode = 404;
-    throw err;
+    throw new AppError(
+      "해당 미션을 도전한 기록이 없습니다.",
+      StatusCodes.NOT_FOUND,
+    );
   }
 
   // 이미 완료된 경우
   if (existing.status === 1) {
-    const err = new Error("이미 완료된 미션입니다.");
-    (err as any).statusCode = 409;
-    throw err;
+    throw new AppError("이미 완료된 미션입니다.", StatusCodes.CONFLICT);
   }
 
   await updateUserMissionStatus(userId, missionId);
