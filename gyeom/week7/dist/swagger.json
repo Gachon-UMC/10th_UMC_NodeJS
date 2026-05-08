@@ -1,0 +1,969 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"UserMissionAddResponse": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"missionId": {
+						"type": "number",
+						"format": "double"
+					},
+					"status": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"userId",
+					"missionId",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ApiResponse_UserMissionAddResponse_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"statusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/UserMissionAddResponse"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"success",
+					"statusCode",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserMissionAddRequest": {
+				"properties": {
+					"missionId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"missionId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserMissionListResponse": {
+				"properties": {
+					"userMissions": {
+						"items": {
+							"$ref": "#/components/schemas/UserMissionAddResponse"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"userMissions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserMissionListApiResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"statusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/UserMissionListResponse"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"success",
+					"statusCode",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserMissionListQuery": {
+				"properties": {
+					"cursor": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserMissionCompleteResponse": {
+				"properties": {
+					"count": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"count"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserMissionCompleteApiResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"statusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/UserMissionCompleteResponse"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"success",
+					"statusCode",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StoreAddResponse": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"regionId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"regionId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StoreAddApiResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"statusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/StoreAddResponse"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"success",
+					"statusCode",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StoreAddRequest": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"foodCategoryId": {
+						"type": "number",
+						"format": "double"
+					},
+					"regionId": {
+						"type": "number",
+						"format": "double"
+					},
+					"address": {
+						"type": "string"
+					},
+					"latitude": {
+						"type": "number",
+						"format": "double"
+					},
+					"longitude": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"name",
+					"foodCategoryId",
+					"regionId",
+					"address",
+					"latitude",
+					"longitude"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReviewAddResponse": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"storeId": {
+						"type": "number",
+						"format": "double"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"rating": {
+						"type": "number",
+						"format": "double"
+					},
+					"content": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"id",
+					"storeId",
+					"userId",
+					"rating",
+					"content"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReviewAddApiResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"statusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ReviewAddResponse"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"success",
+					"statusCode",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReviewAddRequest": {
+				"properties": {
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"rating": {
+						"type": "number",
+						"format": "double"
+					},
+					"content": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"userId",
+					"rating"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReviewListResponse": {
+				"properties": {
+					"reviews": {
+						"items": {
+							"$ref": "#/components/schemas/ReviewAddResponse"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"reviews"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReviewListApiResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"statusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ReviewListResponse"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"success",
+					"statusCode",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MissionAddResponse": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"storeId": {
+						"type": "number",
+						"format": "double"
+					},
+					"content": {
+						"type": "string"
+					},
+					"rewardPoint": {
+						"type": "number",
+						"format": "double"
+					},
+					"deadline": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					}
+				},
+				"required": [
+					"id",
+					"storeId",
+					"content",
+					"rewardPoint",
+					"deadline"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MissionAddApiResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"statusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/MissionAddResponse"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"success",
+					"statusCode",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MissionAddRequest": {
+				"properties": {
+					"content": {
+						"type": "string"
+					},
+					"rewardPoint": {
+						"type": "number",
+						"format": "double"
+					},
+					"deadline": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"content",
+					"rewardPoint"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MissionListResponse": {
+				"properties": {
+					"missions": {
+						"items": {
+							"$ref": "#/components/schemas/MissionAddResponse"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"missions"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MissionListApiResponse": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"statusCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"message": {
+						"type": "string"
+					},
+					"data": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/MissionListResponse"
+							}
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"success",
+					"statusCode",
+					"message",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"MissionListQuery": {
+				"properties": {
+					"cursor": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "playground-umc-10th-nodejs",
+		"version": "1.0.0",
+		"description": "UMC 테스트 프로젝트",
+		"contact": {}
+	},
+	"paths": {
+		"/users/{userId}/missions": {
+			"post": {
+				"operationId": "HandleAddUserMission",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse_UserMissionAddResponse_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserMissionAddRequest"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "HandleGetUserMissions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserMissionListApiResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "cursor",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/users/{userId}/missions/{missionId}": {
+			"patch": {
+				"operationId": "HandleCompleteUserMission",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserMissionCompleteApiResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "path",
+						"name": "missionId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/users/guest": {
+			"get": {
+				"operationId": "HandleGuestPage",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/users/login": {
+			"get": {
+				"operationId": "HandleLoginPage",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/users/mypage": {
+			"get": {
+				"operationId": "HandleMypage",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/users/set-login": {
+			"get": {
+				"operationId": "HandleSetLogin",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/users/set-logout": {
+			"get": {
+				"operationId": "HandleSetLogout",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/stores": {
+			"post": {
+				"operationId": "HandleAddStore",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StoreAddApiResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Stores"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/StoreAddRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/stores/{storeId}/reviews": {
+			"post": {
+				"operationId": "HandleAddReview",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ReviewAddApiResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Reviews"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "storeId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ReviewAddRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{userId}/reviews": {
+			"get": {
+				"operationId": "HandleGetUserReviews",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ReviewListApiResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Reviews"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/stores/{storeId}/missions": {
+			"post": {
+				"operationId": "HandleAddMission",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MissionAddApiResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Missions"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "storeId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/MissionAddRequest"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "HandleGetStoreMissions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/MissionListApiResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Missions"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "storeId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "cursor",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}
