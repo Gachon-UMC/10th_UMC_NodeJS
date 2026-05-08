@@ -1,61 +1,47 @@
-// import { ResultSetHeader, RowDataPacket } from "mysql2";
-// import { pool } from "../../../db.config.js";
 import { prisma } from "../../../db.config.js";
+import { MissionAddRequest } from "../dto/mission.dto.js";
 
 export const addMission = async (data: any) => {
   return await prisma.mission.create({
     data: {
-      store_id: data.storeId,
+      storeId: data.storeId,
       content: data.content,
-      reward_point: data.rewardPoint,
+      rewardPoint: data.rewardPoint,
       deadline: data.deadline,
-      created_at: new Date(),
+      createdAt: new Date(),
+    },
+    select: {
+      id: true,
     },
   });
 };
 
-// export const addMission = async (data: any): Promise<number> => {
-//   const conn = await pool.getConnection();
-//   try {
-//     const [result] = await pool.query<ResultSetHeader>(
-//       `INSERT INTO mission (store_id, content, reward_point, deadline, created_at)
-//        VALUES (?, ?, ?, ?, NOW());`,
-//       [data.storeId, data.content, data.rewardPoint, data.deadline]
-//     );
-//     return result.insertId;
-//   } catch (err) {
-//     throw new Error(`오류가 발생했어요: ${err}`);
-//   } finally {
-//     conn.release();
-//   }
-// };
-
 export const getMission = async (missionId: number) => {
-  return await prisma.mission.findFirst({
+  return await prisma.mission.findUnique({
     where: { id: missionId },
+    select: {
+      id: true,
+      storeId: true,
+      content: true,
+      rewardPoint: true,
+      deadline: true,
+    },
   });
 };
 
-// export const getMission = async (missionId: number): Promise<any | null> => {
-//   const conn = await pool.getConnection();
-//   try {
-//     const [mission] = await pool.query<RowDataPacket[]>(
-//       `SELECT * FROM mission WHERE id = ?;`,
-//       [missionId]
-//     );
-//     if (mission.length === 0) return null;
-//     return mission[0];
-//   } catch (err) {
-//     throw new Error(`오류가 발생했어요: ${err}`);
-//   } finally {
-//     conn.release();
-//   }
-// };
-
-// 6주차 미션
-export const getStoreMissions = async (storeId: bigint) => {
+export const getStoreMissions = async (storeId: bigint, cursor?: number) => {
   return await prisma.mission.findMany({
-    where: { store_id: storeId },
-    orderBy: { created_at: "desc" },
+    where: { storeId },
+    select: {
+      id: true,
+      storeId: true,
+      content: true,
+      rewardPoint: true,
+      deadline: true,
+    },
+    orderBy: { createdAt: "desc" },
+    take: 10,
+    skip: cursor ? 1 : 0,
+    ...(cursor ? { cursor: { id: cursor } } : {}),
   });
 };

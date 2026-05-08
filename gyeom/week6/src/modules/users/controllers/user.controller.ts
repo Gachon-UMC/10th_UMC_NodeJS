@@ -1,14 +1,7 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { userMissionAdd, userMissionList, userMissionComplete } from "../services/user.service.js";
 import { UserMissionAddRequest } from "../dtos/user.dto.js";
-
-// export const handleUserSignUp = async (req: Request, res: Response, next: NextFunction ) => {
-//   console.log("회원가입을 요청했습니다!");
-//   console.log("body:", req.body); // 값이 잘 들어오나 확인하기 위한 테스트용
-//   const user = await userSignUp(req.body as UserSignUpRequest);
-//   res.status(StatusCodes.OK).json({ result: user });
-// };
 
 export const handleAddUserMission = async (req: Request, res: Response) => {
   console.log("미션 도전 요청");
@@ -55,7 +48,8 @@ export const handleGetUserMissions = async (req: Request, res: Response) => {
         data: null,
       });
     }
-    const userMissions = await userMissionList(userId);
+    const cursor = req.query.cursor ? Number(req.query.cursor) : undefined;
+    const userMissions = await userMissionList(userId, cursor);
     return res.status(StatusCodes.OK).json({
       success: true,
       statusCode: StatusCodes.OK,

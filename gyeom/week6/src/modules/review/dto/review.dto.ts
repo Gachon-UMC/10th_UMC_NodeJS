@@ -1,19 +1,19 @@
-import { Prisma } from "../../../generated/prisma/client.js"
-
-
+import { Prisma } from "../../../generated/prisma/client.js";
 
 export interface ReviewAddRequest {
   userId: number;
   rating: number;
   content?: string;
 }
+
 interface ReviewRow {
   id: bigint;
-  store_id: bigint;
-  user_id: bigint;
+  storeId: bigint;
+  userId: bigint;
   rating: Prisma.Decimal;
   content: string | null;
 }
+
 export const bodyToReview = (storeId: number, body: ReviewAddRequest) => {
   return {
     storeId,
@@ -26,8 +26,8 @@ export const bodyToReview = (storeId: number, body: ReviewAddRequest) => {
 export const responseFromReview = ({ review }: { review: ReviewRow | null }) => {
   return {
     id: review?.id,
-    storeId: review?.store_id,
-    userId: review?.user_id,
+    storeId: review?.storeId,
+    userId: review?.userId,
     rating: review?.rating,
     content: review?.content,
   };

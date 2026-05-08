@@ -16,9 +16,13 @@ export const missionAdd = async (storeId: number, data: MissionAddRequest) => {
   }
 };
 
-export const missionList = async (storeId: number) => {
+export const storeMissionList = async (storeId: number, cursor?: number) => {
   try {
-    const missions = await getStoreMissions(BigInt(storeId));
+    const store = await getStore(storeId);
+    if (!store) {
+      throw new Error("존재하지 않는 가게입니다.");
+    }
+    const missions = await getStoreMissions(BigInt(storeId), cursor);
     return responseFromMissions({ missions });
   } catch (err) {
     throw new Error(`오류가 발생했어요: ${err}`);

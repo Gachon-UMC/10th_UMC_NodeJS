@@ -1,60 +1,36 @@
-import { UserSignUpRequest, UserMissionAddRequest, bodyToUserMission, responseFromUserMission, responseFromUserMissions } from "../dtos/user.dto.js";
-import { responseFromUser } from "../dtos/user.dto.js";
-import {
-  // addUser,
-  // getUser,
-  // getUserPreferencesByUserId,
-  // setPreference,
-  addUserMission, getUserMission, getUserMissionById, getUserMissions,
-  updateUserMissionStatus
-} from "../repositories/user.repository.js";
+import { UserMissionAddRequest, bodyToUserMission, responseFromUserMission, responseFromUserMissions } from "../dtos/user.dto.js";
+import { getUser, addUserMission, getUserMission, getUserMissions, updateUserMissionStatus } from "../repositories/user.repository.js";
 import { getMission } from "../../mission/repository/mission.repository.js";
-// import bcrypt from "bcrypt";
-
-// export const userSignUp = async (data: UserSignUpRequest) => {
-//   const hashedPassword = await bcrypt.hash(data.password, 10);
-//   const joinUserId = await addUser({
-//     email: data.email,
-//     name: data.name,
-//     gender: data.gender,
-//     birth: new Date(data.birth),
-//     address: data.address,
-//     detailAddress: data.detailAddress,
-//     phoneNumber: data.phoneNumber,
-//     password: hashedPassword,
-//   });
-//   if (joinUserId === null) {
-//     throw new Error("이미 존재하는 이메일입니다.");
-//   }
-//   for (const preference of data.preferences) {
-//     await setPreference(joinUserId, preference);
-//   }
-//   const user = await getUser(joinUserId);
-//   const preferences = await getUserPreferencesByUserId(joinUserId);
-//   return responseFromUser({ user, preferences });
-// };
+import { UserMissionStatus } from "../../../generated/prisma/index.js";
 
 export const userMissionAdd = async (userId: number, data: UserMissionAddRequest) => {
   try {
+    const user = await getUser(userId);
+    if (!user) {
+      throw new Error("존재하지 않는 사용자입니다.");
+    }
     const mission = await getMission(data.missionId);
     if (!mission) {
       throw new Error("존재하지 않는 미션입니다.");
     }
-    const existing = await getUserMission(userId, data.missionId);
+    const existing = await getUserMission(userId, data.missionId, UserMissionStatus.CHALLENGING);
     if (existing) {
       throw new Error("이미 도전 중인 미션입니다.");
     }
-    const userMission = await addUserMission(bodyToUserMission(userId, data));
-    const userMissionData = await getUserMissionById(Number(userMission.id));
-    return responseFromUserMission({ userMission: userMissionData });
+    const userMission = await addUserMission(userId, data.missionId, UserMissionStatus.CHALLENGING);
+    return responseFromUserMission({ userMission });
   } catch (err) {
     throw new Error(`오류가 발생했어요: ${err}`);
   }
 };
 
-export const userMissionList = async (userId: number) => {
+export const userMissionList = async (userId: number, cursor?: number) => {
   try {
-    const userMissions = await getUserMissions(BigInt(userId), "CHALLENGING");
+    const user = await getUser(userId);
+    if (!user) {
+      throw new Error("존재하지 않는 사용자입니다.");
+    }
+    const userMissions = await getUserMissions(BigInt(userId), UserMissionStatus.CHALLENGING, cursor);
     return responseFromUserMissions({ userMissions });
   } catch (err) {
     throw new Error(`오류가 발생했어요: ${err}`);
@@ -63,7 +39,15 @@ export const userMissionList = async (userId: number) => {
 
 export const userMissionComplete = async (userId: number, missionId: number) => {
   try {
-    const existing = await getUserMission(userId, missionId);
+    const user = await getUser(userId);
+    if (!user) {
+      throw new Error("존재하지 않는 사용자입니다.");
+    }
+    const mission = await getMission(missionId);
+    if (!mission) {
+      throw new Error("존재하지 않는 미션입니다.");
+    }
+    const existing = await getUserMission(userId, missionId, UserMissionStatus.CHALLENGING);
     if (!existing) {
       throw new Error("진행 중인 미션이 아닙니다.");
     }

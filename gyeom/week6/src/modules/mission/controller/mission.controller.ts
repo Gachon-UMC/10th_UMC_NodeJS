@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { missionAdd, missionList } from "../service/mission.service.js";
+import { missionAdd, storeMissionList } from "../service/mission.service.js";
 import { MissionAddRequest } from "../dto/mission.dto.js";
 
 export const handleAddMission = async (req: Request, res: Response) => {
@@ -48,7 +48,8 @@ export const handleGetStoreMissions = async (req: Request, res: Response) => {
         data: null,
       });
     }
-    const missions = await missionList(storeId);
+    const cursor = req.query.cursor ? Number(req.query.cursor) : undefined;
+    const missions = await storeMissionList(storeId, cursor);
     return res.status(StatusCodes.OK).json({
       success: true,
       statusCode: StatusCodes.OK,

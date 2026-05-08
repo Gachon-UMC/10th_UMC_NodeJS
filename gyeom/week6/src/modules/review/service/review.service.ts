@@ -1,6 +1,7 @@
 import { ReviewAddRequest, bodyToReview, responseFromReview, responseFromReviews } from "../dto/review.dto.js";
 import { addReview, getReview, getUserReviews } from "../repository/review.repository.js";
 import { getStore } from "../../store/repository/store.repository.js";
+import { getUser } from "../../users/repositories/user.repository.js";
 
 export const reviewAdd = async (storeId: number, data: ReviewAddRequest) => {
   try {
@@ -18,6 +19,10 @@ export const reviewAdd = async (storeId: number, data: ReviewAddRequest) => {
 
 export const reviewList = async (userId: number) => {
   try {
+    const user = await getUser(userId);
+    if (!user) {
+      throw new Error("존재하지 않는 사용자입니다.");
+    }
     const reviews = await getUserReviews(BigInt(userId));
     return responseFromReviews({ reviews });
   } catch (err) {
