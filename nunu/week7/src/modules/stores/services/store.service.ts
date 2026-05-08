@@ -1,7 +1,17 @@
 import { StatusCodes } from "http-status-codes";
 import { AppError } from "../../../common/errors.js";
-import { responseFromStore, CreateStoreRequest } from "../dtos/store.dto.js";
-import { addStore, getRegionById } from "../repositories/store.repository.js";
+import {
+  responseFromStore,
+  CreateStoreRequest,
+  responseFromMissions,
+} from "../dtos/store.dto.js";
+import {
+  addStore,
+  countmissionsByStore,
+  getMissionsByStore,
+  getRegionById,
+} from "../repositories/store.repository.js";
+import { getStoreById } from "../repositories/review.repository.js";
 
 export const createStore = async (data: CreateStoreRequest) => {
   // region 존재 확인
@@ -25,4 +35,27 @@ export const createStore = async (data: CreateStoreRequest) => {
     createdAt: store.createdAt.toISOString(),
     updatedAt: store.updatedAt.toISOString(),
   });
+};
+
+export const getMissions = async (
+  storeId: number,
+  cursor: number,
+  limit: number,
+) => {
+  const store = await getStoreById(storeId);
+
+  if (!store) {
+    throw new AppError("존재하지 않는 가게입니다.", StatusCodes.NOT_FOUND);
+  }
+
+  const { missions, hasNext } = await getMissionsByStore(
+    storeId,
+    cursor,
+    limit,
+  );
+
+  const totalCount = await countmissionsByStore(storeId);
+  const totalPages = Math.ceil(totalCount / limit);
+
+  return responseFromMissions(missions, hasNext, totalPages);
 };

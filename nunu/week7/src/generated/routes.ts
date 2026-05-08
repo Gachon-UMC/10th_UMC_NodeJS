@@ -87,6 +87,40 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GetMissionResponse": {
+        "dataType": "refObject",
+        "properties": {
+            "id": {"dataType":"double","required":true},
+            "storeName": {"dataType":"string","required":true},
+            "category": {"dataType":"string","required":true},
+            "description": {"dataType":"string","required":true},
+            "rewardPoint": {"dataType":"double","required":true},
+            "expireDate": {"dataType":"string","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "GetMissionsResult": {
+        "dataType": "refObject",
+        "properties": {
+            "missions": {"dataType":"array","array":{"dataType":"refObject","ref":"GetMissionResponse"},"required":true},
+            "totalPages": {"dataType":"double","required":true},
+            "hasNext": {"dataType":"boolean","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "SuccessResponse_GetMissionsResult_": {
+        "dataType": "refObject",
+        "properties": {
+            "success": {"dataType":"enum","enums":[true],"required":true},
+            "statusCode": {"dataType":"double","required":true},
+            "message": {"dataType":"string","required":true},
+            "data": {"ref":"GetMissionsResult","required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "CreateReviewResponse": {
         "dataType": "refObject",
         "properties": {
@@ -167,40 +201,6 @@ const models: TsoaRoute.Models = {
             "statusCode": {"dataType":"double","required":true},
             "message": {"dataType":"string","required":true},
             "data": {"ref":"UserMissionResponse","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "GetMissionResponse": {
-        "dataType": "refObject",
-        "properties": {
-            "id": {"dataType":"double","required":true},
-            "storeName": {"dataType":"string","required":true},
-            "category": {"dataType":"string","required":true},
-            "description": {"dataType":"string","required":true},
-            "rewardPoint": {"dataType":"double","required":true},
-            "expireDate": {"dataType":"string","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "GetMissionsResult": {
-        "dataType": "refObject",
-        "properties": {
-            "missions": {"dataType":"array","array":{"dataType":"refObject","ref":"GetMissionResponse"},"required":true},
-            "totalPages": {"dataType":"double","required":true},
-            "hasNext": {"dataType":"boolean","required":true},
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "SuccessResponse_GetMissionsResult_": {
-        "dataType": "refObject",
-        "properties": {
-            "success": {"dataType":"enum","enums":[true],"required":true},
-            "statusCode": {"dataType":"double","required":true},
-            "message": {"dataType":"string","required":true},
-            "data": {"ref":"GetMissionsResult","required":true},
         },
         "additionalProperties": false,
     },
@@ -450,6 +450,38 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsStoreController_handleGetMissions: Record<string, TsoaRoute.ParameterSchema> = {
+                storeId: {"in":"path","name":"storeId","required":true,"dataType":"double"},
+                cursor: {"default":0,"in":"query","name":"cursor","dataType":"double"},
+                limit: {"default":5,"in":"query","name":"limit","dataType":"double"},
+        };
+        app.get('/stores/:storeId/missions',
+            ...(fetchMiddlewares<RequestHandler>(StoreController)),
+            ...(fetchMiddlewares<RequestHandler>(StoreController.prototype.handleGetMissions)),
+
+            async function StoreController_handleGetMissions(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsStoreController_handleGetMissions, request, response });
+
+                const controller = new StoreController();
+
+              await templateService.apiHandler({
+                methodName: 'handleGetMissions',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
         const argsReviewController_handleCreateReview: Record<string, TsoaRoute.ParameterSchema> = {
                 storeId: {"in":"path","name":"storeId","required":true,"dataType":"double"},
                 data: {"in":"body","name":"data","required":true,"ref":"CreateReviewRequest"},
@@ -537,38 +569,6 @@ export function RegisterRoutes(app: Router) {
                 next,
                 validatedArgs,
                 successStatus: 201,
-              });
-            } catch (err) {
-                return next(err);
-            }
-        });
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        const argsMissionController_handleGetMissions: Record<string, TsoaRoute.ParameterSchema> = {
-                storeId: {"in":"path","name":"storeId","required":true,"dataType":"double"},
-                cursor: {"default":0,"in":"query","name":"cursor","dataType":"double"},
-                limit: {"default":5,"in":"query","name":"limit","dataType":"double"},
-        };
-        app.get('/missions/stores/:storeId/missions',
-            ...(fetchMiddlewares<RequestHandler>(MissionController)),
-            ...(fetchMiddlewares<RequestHandler>(MissionController.prototype.handleGetMissions)),
-
-            async function MissionController_handleGetMissions(request: ExRequest, response: ExResponse, next: any) {
-
-            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-            let validatedArgs: any[] = [];
-            try {
-                validatedArgs = templateService.getValidatedArgs({ args: argsMissionController_handleGetMissions, request, response });
-
-                const controller = new MissionController();
-
-              await templateService.apiHandler({
-                methodName: 'handleGetMissions',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
               });
             } catch (err) {
                 return next(err);

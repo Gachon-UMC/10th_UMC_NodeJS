@@ -1,6 +1,16 @@
-import { Body, Controller, Post, Route, SuccessResponse, Tags } from "tsoa";
+import {
+  Body,
+  Controller,
+  Get,
+  Path,
+  Post,
+  Query,
+  Route,
+  SuccessResponse,
+  Tags,
+} from "tsoa";
 import { StatusCodes } from "http-status-codes";
-import { createStore } from "../services/store.service.js";
+import { createStore, getMissions } from "../services/store.service.js";
 import { CreateStoreRequest } from "../dtos/store.dto.js";
 import { success } from "../../../common/responses.js";
 import { AppError } from "../../../common/errors.js";
@@ -30,5 +40,34 @@ export class StoreController extends Controller {
     this.setStatus(StatusCodes.CREATED);
 
     return success(store, "가게 생성이 완료되었습니다.", StatusCodes.CREATED);
+  }
+
+  @Get("{storeId}/missions")
+  public async handleGetMissions(
+    @Path() storeId: number,
+    @Query() cursor: number = 0,
+    @Query() limit: number = 5,
+  ) {
+    console.log("미션 목록 조회를 요청했습니다!");
+
+    // storeId 검증
+    if (!storeId || Number.isNaN(storeId)) {
+      throw new AppError(
+        "유효하지 않은 storeId 입니다.",
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+
+    // cursor, limit 검증
+    if (Number.isNaN(cursor) || Number.isNaN(limit) || limit < 1) {
+      throw new AppError(
+        "유효하지 않은 cursor 또는 limit 입니다.",
+        StatusCodes.BAD_REQUEST,
+      );
+    }
+
+    const result = await getMissions(storeId, cursor, limit);
+
+    return success(result, "미션 목록 조회를 성공했습니다.", StatusCodes.OK);
   }
 }

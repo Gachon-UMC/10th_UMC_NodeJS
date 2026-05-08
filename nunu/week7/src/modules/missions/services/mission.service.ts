@@ -1,16 +1,13 @@
 import { StatusCodes } from "http-status-codes";
 import { AppError } from "../../../common/errors.js";
-import { getStoreById } from "../../stores/repositories/review.repository.js";
+
 import {
   responseFromCompletedMission,
-  responseFromMissions,
   responseFromUserMission,
 } from "../dtos/mission.dto.js";
 import {
   addUserMission,
-  countmissionsByStore,
   getMissionById,
-  getMissionsByStore,
   getUserMissionByMissionId,
   updateUserMissionStatus,
 } from "../repositories/mission.repository.js";
@@ -41,29 +38,6 @@ export const createChallangeMission = async (
     createdAt: userMission.createdAt.toISOString(),
     updatedAt: userMission.updatedAt.toISOString(),
   });
-};
-
-export const getMissions = async (
-  storeId: number,
-  cursor: number,
-  limit: number,
-) => {
-  const store = await getStoreById(storeId);
-
-  if (!store) {
-    throw new AppError("존재하지 않는 가게입니다.", StatusCodes.NOT_FOUND);
-  }
-
-  const { missions, hasNext } = await getMissionsByStore(
-    storeId,
-    cursor,
-    limit,
-  );
-
-  const totalCount = await countmissionsByStore(storeId);
-  const totalPages = Math.ceil(totalCount / limit);
-
-  return responseFromMissions(missions, hasNext, totalPages);
 };
 
 export const completeUserMission = async (
