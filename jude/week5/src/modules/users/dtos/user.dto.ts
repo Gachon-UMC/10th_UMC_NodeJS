@@ -71,9 +71,6 @@ export const responseFromUser = (user: ResponseFromUserParams) => {
     };
 };
 
-<<<<<<< Updated upstream
-
-=======
 export interface CreateStoreRequest {
   name: string;
   address: string;      
@@ -87,7 +84,6 @@ export interface CreateReviewRequest {
   content: string;
   
 }
->>>>>>> Stashed changes
 
 
 

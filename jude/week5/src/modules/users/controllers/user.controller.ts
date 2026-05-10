@@ -19,14 +19,6 @@ export const handleCreateStore = async (req: any, res: any) => {
     const data = await createStore(req.body);
     
     
-<<<<<<< Updated upstream
-    res.status(201).send({
-      success: true,
-      statusCode: 201,
-      message: "가게 생성이 완료되었습니다.",
-      data: data
-    });
-=======
   return res.status(StatusCodes.CREATED).send({
       success: true,
       statusCode: StatusCodes.CREATED,
@@ -34,7 +26,6 @@ export const handleCreateStore = async (req: any, res: any) => {
       data,
  });
 
->>>>>>> Stashed changes
   } catch (err) {
     console.error(err);
     res.status(500).send({
@@ -46,12 +37,6 @@ export const handleCreateStore = async (req: any, res: any) => {
 
 export const handleCreateReview = async (req: any, res: any) => {
     try {
-<<<<<<< Updated upstream
-        const { storeId } = req.params; 
-        const data = await createReview(Number(storeId), req.body);
-
-        res.status(201).send({
-=======
         const userId = 1;
         const { storeId } = req.params; 
 
@@ -66,7 +51,6 @@ export const handleCreateReview = async (req: any, res: any) => {
         const data = await createReview(userId, Number(storeId), req.body);
 
         return res.status(StatusCodes.CREATED).send({
->>>>>>> Stashed changes
             success: true,
             statusCode: 201,
             message: "리뷰 작성이 완료되었습니다.",
@@ -84,14 +68,6 @@ export const handleCreateReview = async (req: any, res: any) => {
     }
 };
 
-<<<<<<< Updated upstream
-export const handleChallengeMission = async (req: any, res: any) => {
-    try {
-        const { missionId } = req.params;
-        const data = await challengeMission(Number(missionId));
-
-        res.status(201).send({
-=======
 export const handleChallengeMission = async (req: Request,res: Response) => {
     try {
         const userId = 1;
@@ -110,7 +86,6 @@ export const handleChallengeMission = async (req: Request,res: Response) => {
         const data = await challengeMission(userId, Number(missionId));
 
         return res.status(201).send({
->>>>>>> Stashed changes
             success: true,
             statusCode: 201,
             message: "미션 도전이 시작되었습니다.",
