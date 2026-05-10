@@ -1,5 +1,9 @@
 import { type UserSignUpRequest } from "../dtos/user.dto.js"; //인터페이스 가져오기 
+<<<<<<< Updated upstream
 import { responseFromUser } from "../dtos/user.dto.js";
+=======
+import { responseFromUser,CreateStoreRequest,CreateReviewRequest } from "../dtos/user.dto.js";
+>>>>>>> Stashed changes
 import {
   addUser,
   getUser,
@@ -40,7 +44,11 @@ export const userSignUp = async (data: UserSignUpRequest) => {
   return responseFromUser({ ...user, preferences });
 };
 
+<<<<<<< Updated upstream
 export const createStore = async (body: any) => {
+=======
+export const createStore = async (body: CreateStoreRequest) => {
+>>>>>>> Stashed changes
   const storeId = await confirmStore({
     name: body.name,
     storeType: body.storeType,
@@ -51,7 +59,11 @@ export const createStore = async (body: any) => {
   return store;
 };
 
+<<<<<<< Updated upstream
 export const createReview = async (storeId: number, body: any) => {
+=======
+export const createReview = async (userId:number, storeId: number, body: CreateReviewRequest) => {
+>>>>>>> Stashed changes
     // 1. 가게 존재 여부 검증
     const isExist = await existsStore(storeId);
     if (!isExist) {
@@ -59,14 +71,22 @@ export const createReview = async (storeId: number, body: any) => {
     }
 
     // 2. 리뷰 추가 (사용자 ID는 1번으로 가정)
+<<<<<<< Updated upstream
     const reviewId = await addReview(1, storeId, body);
+=======
+    const reviewId = await addReview(userId,storeId, body);
+>>>>>>> Stashed changes
     
     // 3. 응답용 데이터 조회
     return await getReviewResponse(reviewId);
 };
 
+<<<<<<< Updated upstream
 export const challengeMission = async (missionId: number) => {
     const userId = 1; // 조건: 특정 사용자(1번)로 가정
+=======
+export const challengeMission = async (userId: number, missionId: number) => {
+>>>>>>> Stashed changes
 
     // 1. 중복 도전 검증
     const exists = await isAlreadyChallenging(userId, missionId);

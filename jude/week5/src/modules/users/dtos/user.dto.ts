@@ -71,7 +71,23 @@ export const responseFromUser = (user: ResponseFromUserParams) => {
     };
 };
 
+<<<<<<< Updated upstream
 
+=======
+export interface CreateStoreRequest {
+  name: string;
+  address: string;      
+  storeType: string;    
+  regionId: number;
+}
+
+
+export interface CreateReviewRequest {
+  score: number;
+  content: string;
+  
+}
+>>>>>>> Stashed changes
 
 
 
