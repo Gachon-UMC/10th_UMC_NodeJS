@@ -92,7 +92,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"UserMissionListApiResponse": {
+			"ApiResponse_UserMissionListResponse_": {
 				"properties": {
 					"success": {
 						"type": "boolean"
@@ -145,7 +145,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"UserMissionCompleteApiResponse": {
+			"ApiResponse_UserMissionCompleteResponse_": {
 				"properties": {
 					"success": {
 						"type": "boolean"
@@ -197,7 +197,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"StoreAddApiResponse": {
+			"ApiResponse_StoreAddResponse_": {
 				"properties": {
 					"success": {
 						"type": "boolean"
@@ -296,7 +296,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ReviewAddApiResponse": {
+			"ApiResponse_ReviewAddResponse_": {
 				"properties": {
 					"success": {
 						"type": "boolean"
@@ -362,7 +362,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ReviewListApiResponse": {
+			"ApiResponse_ReviewListResponse_": {
 				"properties": {
 					"success": {
 						"type": "boolean"
@@ -425,7 +425,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"MissionAddApiResponse": {
+			"ApiResponse_MissionAddResponse_": {
 				"properties": {
 					"success": {
 						"type": "boolean"
@@ -491,7 +491,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"MissionListApiResponse": {
+			"ApiResponse_MissionListResponse_": {
 				"properties": {
 					"success": {
 						"type": "boolean"
@@ -590,7 +590,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserMissionListApiResponse"
+									"$ref": "#/components/schemas/ApiResponse_UserMissionListResponse_"
 								}
 							}
 						}
@@ -631,7 +631,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/UserMissionCompleteApiResponse"
+									"$ref": "#/components/schemas/ApiResponse_UserMissionCompleteResponse_"
 								}
 							}
 						}
@@ -782,7 +782,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/StoreAddApiResponse"
+									"$ref": "#/components/schemas/ApiResponse_StoreAddResponse_"
 								}
 							}
 						}
@@ -814,7 +814,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ReviewAddApiResponse"
+									"$ref": "#/components/schemas/ApiResponse_ReviewAddResponse_"
 								}
 							}
 						}
@@ -856,7 +856,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/ReviewListApiResponse"
+									"$ref": "#/components/schemas/ApiResponse_ReviewListResponse_"
 								}
 							}
 						}
@@ -888,7 +888,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/MissionAddApiResponse"
+									"$ref": "#/components/schemas/ApiResponse_MissionAddResponse_"
 								}
 							}
 						}
@@ -928,7 +928,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/MissionListApiResponse"
+									"$ref": "#/components/schemas/ApiResponse_MissionListResponse_"
 								}
 							}
 						}

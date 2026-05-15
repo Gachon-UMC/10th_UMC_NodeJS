@@ -56,7 +56,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserMissionListApiResponse": {
+    "ApiResponse_UserMissionListResponse_": {
         "dataType": "refObject",
         "properties": {
             "success": {"dataType":"boolean","required":true},
@@ -83,7 +83,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserMissionCompleteApiResponse": {
+    "ApiResponse_UserMissionCompleteResponse_": {
         "dataType": "refObject",
         "properties": {
             "success": {"dataType":"boolean","required":true},
@@ -104,7 +104,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "StoreAddApiResponse": {
+    "ApiResponse_StoreAddResponse_": {
         "dataType": "refObject",
         "properties": {
             "success": {"dataType":"boolean","required":true},
@@ -140,7 +140,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReviewAddApiResponse": {
+    "ApiResponse_ReviewAddResponse_": {
         "dataType": "refObject",
         "properties": {
             "success": {"dataType":"boolean","required":true},
@@ -169,7 +169,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ReviewListApiResponse": {
+    "ApiResponse_ReviewListResponse_": {
         "dataType": "refObject",
         "properties": {
             "success": {"dataType":"boolean","required":true},
@@ -192,7 +192,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "MissionAddApiResponse": {
+    "ApiResponse_MissionAddResponse_": {
         "dataType": "refObject",
         "properties": {
             "success": {"dataType":"boolean","required":true},
@@ -221,7 +221,7 @@ const models: TsoaRoute.Models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "MissionListApiResponse": {
+    "ApiResponse_MissionListResponse_": {
         "dataType": "refObject",
         "properties": {
             "success": {"dataType":"boolean","required":true},
