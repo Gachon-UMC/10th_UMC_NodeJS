@@ -18,7 +18,14 @@ export const createReview = async (
     throw new Error("존재하지 않는 가게입니다.");
   }
 
-  await addReview(data.userId, storeId, data.rating, data.content);
+  const review = await addReview(
+    data.userId,
+    storeId,
+    data.rating,
+    data.content
+  )
+
+  return review;
 };
 
 export const createMission = async (
@@ -31,21 +38,26 @@ export const createMission = async (
     throw new Error("존재하지 않는 가게입니다.");
   }
 
-  await addMission(
+  const mission = await addMission(
     storeId,
     data.title,
     data.description,
     data.rewardPoint,
     data.deadline
   );
+
+  return mission;
 };
 
 export const getMyReviewsService = async (userId: number, cursor?: number) => {
   return await getMyReviews(userId, cursor);
 };
 
-export const getMissionsByStoreService = async (storeId: number) => {
-  return await getMissionsByStoreId(storeId);
+export const getMissionsByStoreService = async (
+  storeId: number,
+  cursor?: number
+) => {
+  return await getMissionsByStoreId(storeId, cursor);
 };
 
 export const completeMissionService = async (userMissionId: number) => {

@@ -63,14 +63,23 @@ export const getMyReviews = async (
   });
 };
 
-export const getMissionsByStoreId = async (storeId: number) => {
+export const getMissionsByStoreId = async (
+  storeId: number,
+  cursor?: number
+) => {
   return await prisma.mission.findMany({
     where: {
       storeId,
+      ...(cursor && {
+        id: {
+          gt: cursor,
+        },
+      }),
     },
     orderBy: {
       id: "asc",
     },
+    take: 10,
   });
 };
 

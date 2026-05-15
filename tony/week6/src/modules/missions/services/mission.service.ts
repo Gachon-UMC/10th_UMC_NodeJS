@@ -24,5 +24,7 @@ export const challengeMission = async (
     throw new Error("이미 도전 중인 미션입니다.");
   }
 
-  await addUserMission(data.userId, missionId);
+  const result = await addUserMission(data.userId, missionId);
+  
+  return result;
 };

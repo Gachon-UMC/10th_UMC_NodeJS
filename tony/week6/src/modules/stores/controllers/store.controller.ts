@@ -48,9 +48,13 @@ export const handleGetMyReviews = async (req: Request, res: Response) => {
 };
 
 export const handleGetStoreMissions = async (req: Request, res: Response) => {
-const storeId = parseInt(req.params.storeId as string);
+  const storeId = parseInt(req.params.storeId as string);
 
-  const missions = await getMissionsByStoreService(storeId);
+     const cursor = req.query.cursor
+      ?parseInt(req.query.cursor as string)
+      :undefined;
+
+     const missions = await getMissionsByStoreService(storeId, cursor);
 
   res.json(success(missions));
 };

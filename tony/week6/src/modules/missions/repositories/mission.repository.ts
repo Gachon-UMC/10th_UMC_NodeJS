@@ -30,7 +30,7 @@ export const addUserMission = async (
     data: {
       userId,
       missionId,
-      status: "진행중",
+      status: "CHALLENGING",
     },
   });
 };
