@@ -1,21 +1,15 @@
-import { MissionAddRequest, MissionAddResponse, MissionListResponse } from "../dto/mission.dto.js";
+import { MissionAddRequest, MissionAddResponse, MissionListResponse, toMissionResponse } from "../dto/mission.dto.js";
 import { addMission, getMission, getStoreMissions } from "../repository/mission.repository.js";
 import { getStore } from "../../store/repository/store.repository.js";
-import { AppError } from "../../../common/errors/app.error.js";
-import { StatusCodes } from "http-status-codes";
+import { StoreNotFoundError } from "../../../common/errors/error.js";
 
 export const missionAdd = async (
   storeId: number,
   data: MissionAddRequest
 ): Promise<MissionAddResponse> => {
-
   const store = await getStore(storeId);
-
   if (!store) {
-    throw new AppError(
-      StatusCodes.NOT_FOUND,
-      "존재하지 않는 가게입니다."
-    );
+    throw new StoreNotFoundError();
   }
 
   const mission = await addMission({
@@ -26,47 +20,20 @@ export const missionAdd = async (
   });
 
   const missionData = await getMission(Number(mission.id));
-
-  return {
-    id: Number(missionData?.id),
-    storeId: Number(missionData?.storeId),
-    content: missionData?.content ?? "",
-    rewardPoint: Number(missionData?.rewardPoint),
-    deadline: missionData?.deadline
-      ? Number(missionData.deadline)
-      : null,
-  };
+  return toMissionResponse(missionData);
 };
-
 
 export const storeMissionList = async (
   storeId: number,
   cursor?: number
 ): Promise<MissionListResponse> => {
-
   const store = await getStore(storeId);
-
   if (!store) {
-    throw new AppError(
-      StatusCodes.NOT_FOUND,
-      "존재하지 않는 가게입니다."
-    );
+    throw new StoreNotFoundError();
   }
 
-  const missions = await getStoreMissions(
-    BigInt(storeId),
-    cursor
-  );
-
+  const missions = await getStoreMissions(BigInt(storeId), cursor);
   return {
-    missions: missions.map((mission) => ({
-      id: Number(mission.id),
-      storeId: Number(mission.storeId),
-      content: mission.content,
-      rewardPoint: Number(mission.rewardPoint),
-      deadline: mission.deadline
-        ? Number(mission.deadline)
-        : null,
-    })),
+    missions: missions.map(toMissionResponse),
   };
 };

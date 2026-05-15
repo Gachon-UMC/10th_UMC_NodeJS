@@ -29,3 +29,14 @@ export interface ReviewListApiResponse {
   message: string;
   data: ReviewListResponse | null;
 }
+
+
+export const toReviewResponse = (review: any): ReviewAddResponse => {
+  return {
+    id: Number(review?.id),
+    storeId: Number(review?.storeId),
+    userId: Number(review?.userId),
+    rating: Number(review?.rating),
+    content: review?.content ?? null,
+  };
+};

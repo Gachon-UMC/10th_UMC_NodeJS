@@ -19,3 +19,12 @@ export interface StoreAddApiResponse {
   message: string;
   data: StoreAddResponse | null;
 }
+
+
+export const toStoreResponse = (store: any): StoreAddResponse => {
+  return {
+    id: Number(store?.id),
+    name: store?.name ?? "",
+    regionId: Number(store?.regionId),
+  };
+};

@@ -29,3 +29,14 @@ export interface MissionListApiResponse {
   message: string;
   data: MissionListResponse | null;
 }
+
+
+export const toMissionResponse = (mission: any): MissionAddResponse => {
+  return {
+    id: Number(mission.id),
+    storeId: Number(mission.storeId),
+    content: mission.content,
+    rewardPoint: Number(mission.rewardPoint),
+    deadline: mission.deadline ? Number(mission.deadline) : null,
+  };
+};

@@ -37,3 +37,12 @@ export interface UserMissionCompleteApiResponse {
   message: string;
   data: UserMissionCompleteResponse | null;
 }
+
+export const toUserMissionResponse = (userMission: any): UserMissionAddResponse => {
+  return {
+    id: Number(userMission.id),
+    userId: Number(userMission.userId),
+    missionId: Number(userMission.missionId),
+    status: userMission.status,
+  };
+};
