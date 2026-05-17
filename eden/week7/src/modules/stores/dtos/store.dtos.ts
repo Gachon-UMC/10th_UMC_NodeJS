@@ -14,7 +14,7 @@ export interface StoreResponseDTO {
   foodCategory: StoreFoodCategory;
 }
 
-export const responseFromStore = (store: any) => {
+export const responseFromStore = (store: any): StoreResponseDTO => {
   return {
     id: store.id,
     name: store.name,

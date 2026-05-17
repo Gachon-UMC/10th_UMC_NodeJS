@@ -1,8 +1,9 @@
 import { StatusCodes } from "http-status-codes";
-import { AddReviewRequestDTO } from "../dtos/review.dto";
+import { AddReviewRequestDTO, MyReview, ReviewListResponse} from "../dtos/review.dto";
 import { createReview, listMyReviews, listStoreReviews } from "../services/review.service";
 import { Body, Controller, Get, Post, Path, Query, Route, Tags, SuccessResponse } from "tsoa";
 import { AppError } from "../../../common/errors/app.error";
+import { ApiResponse, success } from "../../../common/responses/response";
 
 @Route("reviews")
 @Tags("Reviews")
@@ -14,8 +15,8 @@ export class ReviewController extends Controller {
   public async addReview(
     @Path() storeId: number,
     @Body() reviewData: AddReviewRequestDTO
-  ) { 
-    if (!storeId || Number.isNaN(storeId)) {
+  ): Promise<ApiResponse<{ newReviewId: number }>> {
+    if (!storeId || Number.isNaN(storeId)) {  
     throw new AppError({
       errorCode: "INVALID_STORE_ID",
       message: "존재하지 않는 가게입니다.",
@@ -25,16 +26,16 @@ export class ReviewController extends Controller {
     const result = await createReview(storeId, reviewData);
 
     this.setStatus(StatusCodes.CREATED);
-    return { result };
+    return success(result);
   }
 
   //내가 작성한 리뷰 목록 조회 (GET /reviews)
   @Get("my")
   public async listMyReviews(
     @Query() userId: number
-  ) {
+  ):Promise<ApiResponse<MyReview[]>> {
         const reviews = await listMyReviews(userId);
-    return reviews;
+    return success(reviews);
   }
 
   //특정 가게의 리뷰 목록 조회 (GET /reviews/{storeId})
@@ -42,8 +43,8 @@ export class ReviewController extends Controller {
   public async listStoreReviews(
     @Path() storeId: number,
     @Query() cursor: number
-  ) {
+  ): Promise<ApiResponse< ReviewListResponse>> {
     const reviews = await listStoreReviews(storeId, cursor);
-    return reviews;
+    return success(reviews);
   }
 }

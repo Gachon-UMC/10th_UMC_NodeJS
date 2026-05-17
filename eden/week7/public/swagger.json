@@ -114,6 +114,71 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"ApiResponse__id-any--name-any--region-any--foodCategory-any__": {
+				"properties": {
+					"resultType": {
+						"type": "string",
+						"enum": [
+							"SUCCESS"
+						],
+						"nullable": false
+					},
+					"error": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					},
+					"data": {
+						"properties": {
+							"foodCategory": {},
+							"region": {},
+							"name": {},
+							"id": {}
+						},
+						"required": [
+							"foodCategory",
+							"region",
+							"name",
+							"id"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"resultType",
+					"error",
+					"data"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"StoreFoodCategory": {
+				"type": "string",
+				"enum": [
+					"KOREAN",
+					"CHINESE",
+					"JAPANESE",
+					"WESTERN"
+				]
+			},
+			"AddStoreRequestDTO": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"foodCategory": {
+						"$ref": "#/components/schemas/StoreFoodCategory"
+					}
+				},
+				"required": [
+					"name",
+					"foodCategory"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -263,6 +328,48 @@
 				],
 				"security": [],
 				"parameters": []
+			}
+		},
+		"/region/{regionId}/stores": {
+			"post": {
+				"operationId": "AddStore",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ApiResponse__id-any--name-any--region-any--foodCategory-any__"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Stores"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "regionId",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AddStoreRequestDTO"
+							}
+						}
+					}
+				}
 			}
 		}
 	},

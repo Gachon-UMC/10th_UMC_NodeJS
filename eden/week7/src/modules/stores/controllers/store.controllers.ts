@@ -1,8 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import { createStore } from "../services/store.services.js";
-import { AddStoreRequestDTO } from "../dtos/store.dtos.js";
+import { AddStoreRequestDTO, StoreResponseDTO } from "../dtos/store.dtos.js";
 import { Body, Path, Post, Route, Tags, SuccessResponse } from "tsoa";
-import { success } from "../../../common/responses/response.js";
+import { ApiResponse, success } from "../../../common/responses/response.js";
 import { AppError } from "../../../common/errors/app.error.js";
 
 
@@ -16,7 +16,7 @@ export class StoreController {
   public async addStore(
     @Path() regionId: number, 
     @Body() storeData: AddStoreRequestDTO 
-  ) {
+  ):Promise<ApiResponse<StoreResponseDTO >> {
     if (!regionId || Number.isNaN(regionId)) {
       throw new AppError({
         errorCode: "INVALID_REGION_ID",

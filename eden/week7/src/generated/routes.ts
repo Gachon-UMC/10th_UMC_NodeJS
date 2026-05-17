@@ -5,6 +5,8 @@ import type { TsoaRoute } from '@tsoa/runtime';
 import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UserController } from './../modules/users/controllers/user.controllers';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { StoreController } from './../modules/stores/controllers/store.controllers';
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
 
 
@@ -44,6 +46,30 @@ const models: TsoaRoute.Models = {
             "detailAddress": {"dataType":"string"},
             "phoneNumber": {"dataType":"string","required":true},
             "preferences": {"dataType":"array","array":{"dataType":"double"},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse__id-any--name-any--region-any--foodCategory-any__": {
+        "dataType": "refObject",
+        "properties": {
+            "resultType": {"dataType":"enum","enums":["SUCCESS"],"required":true},
+            "error": {"dataType":"enum","enums":[null],"required":true},
+            "data": {"dataType":"nestedObjectLiteral","nestedProperties":{"foodCategory":{"dataType":"any","required":true},"region":{"dataType":"any","required":true},"name":{"dataType":"any","required":true},"id":{"dataType":"any","required":true}},"required":true},
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "StoreFoodCategory": {
+        "dataType": "refAlias",
+        "type": {"dataType":"union","subSchemas":[{"dataType":"enum","enums":["KOREAN"]},{"dataType":"enum","enums":["CHINESE"]},{"dataType":"enum","enums":["JAPANESE"]},{"dataType":"enum","enums":["WESTERN"]}],"validators":{}},
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "AddStoreRequestDTO": {
+        "dataType": "refObject",
+        "properties": {
+            "name": {"dataType":"string","required":true},
+            "foodCategory": {"ref":"StoreFoodCategory","required":true},
         },
         "additionalProperties": false,
     },
@@ -237,6 +263,37 @@ export function RegisterRoutes(app: Router) {
                 next,
                 validatedArgs,
                 successStatus: undefined,
+              });
+            } catch (err) {
+                return next(err);
+            }
+        });
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        const argsStoreController_addStore: Record<string, TsoaRoute.ParameterSchema> = {
+                regionId: {"in":"path","name":"regionId","required":true,"dataType":"double"},
+                storeData: {"in":"body","name":"storeData","required":true,"ref":"AddStoreRequestDTO"},
+        };
+        app.post('/region/:regionId/stores',
+            ...(fetchMiddlewares<RequestHandler>(StoreController)),
+            ...(fetchMiddlewares<RequestHandler>(StoreController.prototype.addStore)),
+
+            async function StoreController_addStore(request: ExRequest, response: ExResponse, next: any) {
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = templateService.getValidatedArgs({ args: argsStoreController_addStore, request, response });
+
+                const controller = new StoreController();
+
+              await templateService.apiHandler({
+                methodName: 'addStore',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: 201,
               });
             } catch (err) {
                 return next(err);
