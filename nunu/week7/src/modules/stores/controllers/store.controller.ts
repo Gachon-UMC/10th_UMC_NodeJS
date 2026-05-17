@@ -14,6 +14,11 @@ import { createStore, getMissions } from "../services/store.service.js";
 import { CreateStoreRequest } from "../dtos/store.dto.js";
 import { success } from "../../../common/responses.js";
 import { AppError } from "../../../common/errors.js";
+import {
+  InvalidPaginationQueryError,
+  InvalidStoreIdError,
+  MissingReviewFieldError,
+} from "../../../common/customError.js";
 
 @Route("stores")
 @Tags("Store")
@@ -28,7 +33,7 @@ export class StoreController extends Controller {
 
     // 필수값 검증
     if (!name || !storeType || regionId === undefined) {
-      throw new AppError("필수값이 누락되었습니다.", StatusCodes.BAD_REQUEST);
+      throw new MissingReviewFieldError();
     }
 
     const store = await createStore({
@@ -52,18 +57,12 @@ export class StoreController extends Controller {
 
     // storeId 검증
     if (!storeId || Number.isNaN(storeId)) {
-      throw new AppError(
-        "유효하지 않은 storeId 입니다.",
-        StatusCodes.BAD_REQUEST,
-      );
+      throw new InvalidStoreIdError();
     }
 
     // cursor, limit 검증
     if (Number.isNaN(cursor) || Number.isNaN(limit) || limit < 1) {
-      throw new AppError(
-        "유효하지 않은 cursor 또는 limit 입니다.",
-        StatusCodes.BAD_REQUEST,
-      );
+      throw new InvalidPaginationQueryError();
     }
 
     const result = await getMissions(storeId, cursor, limit);

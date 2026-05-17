@@ -12,13 +12,17 @@ import {
   getRegionById,
 } from "../repositories/store.repository.js";
 import { getStoreById } from "../repositories/review.repository.js";
+import {
+  RegionNotFoundError,
+  StoreNotFoundError,
+} from "../../../common/customError.js";
 
 export const createStore = async (data: CreateStoreRequest) => {
   // region 존재 확인
   const region = await getRegionById(data.regionId);
 
   if (!region) {
-    throw new AppError("존재하지 않는 지역입니다.", StatusCodes.NOT_FOUND);
+    throw new RegionNotFoundError();
   }
 
   // DB 저장
@@ -45,7 +49,7 @@ export const getMissions = async (
   const store = await getStoreById(storeId);
 
   if (!store) {
-    throw new AppError("존재하지 않는 가게입니다.", StatusCodes.NOT_FOUND);
+    throw new StoreNotFoundError();
   }
 
   const { missions, hasNext } = await getMissionsByStore(

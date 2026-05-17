@@ -14,6 +14,13 @@ import { createReview, getMyReviews } from "../services/review.service.js";
 import { CreateReviewRequest } from "../dtos/review.dto.js";
 import { AppError } from "../../../common/errors.js";
 import { success } from "../../../common/responses.js";
+import {
+  InvalidPaginationQueryError,
+  InvalidStarRateError,
+  InvalidStoreIdError,
+  MissingReviewFieldError,
+  UnauthorizedUserError,
+} from "../../../common/customError.js";
 
 @Route("stores")
 @Tags("Review")
@@ -30,30 +37,24 @@ export class ReviewController extends Controller {
 
     // storeId 검증
     if (!storeId || Number.isNaN(storeId)) {
-      throw new AppError(
-        "유효하지 않은 storeId 입니다.",
-        StatusCodes.BAD_REQUEST,
-      );
+      throw new InvalidStoreIdError();
     }
 
     // userId 검증
     if (!userId) {
-      throw new AppError("사용자 정보가 없습니다.", StatusCodes.UNAUTHORIZED);
+      throw new UnauthorizedUserError();
     }
 
     const { content, starRate } = data;
 
     // body 검증
     if (!content || starRate === undefined) {
-      throw new AppError("필수값이 누락되었습니다.", StatusCodes.BAD_REQUEST);
+      throw new MissingReviewFieldError();
     }
 
     // 별점 범위 체크
     if (starRate < 0 || starRate > 5) {
-      throw new AppError(
-        "별점은 0~5 사이여야 합니다.",
-        StatusCodes.BAD_REQUEST,
-      );
+      throw new InvalidStarRateError();
     }
 
     const review = await createReview(userId, storeId, {
@@ -78,23 +79,17 @@ export class ReviewController extends Controller {
 
     // userId 검증
     if (!userId) {
-      throw new AppError("사용자 정보가 없습니다.", StatusCodes.UNAUTHORIZED);
+      throw new UnauthorizedUserError();
     }
 
     // storeId 검증
     if (!storeId || Number.isNaN(storeId)) {
-      throw new AppError(
-        "유효하지 않은 storeId 입니다.",
-        StatusCodes.BAD_REQUEST,
-      );
+      throw new InvalidStoreIdError();
     }
 
     // cursor, limit 검증
     if (Number.isNaN(cursor) || Number.isNaN(limit) || limit < 1) {
-      throw new AppError(
-        "유효하지 않은 cursor 또는 limit 입니다.",
-        StatusCodes.BAD_REQUEST,
-      );
+      throw new InvalidPaginationQueryError();
     }
 
     const reviews = await getMyReviews(userId, storeId, cursor, limit);

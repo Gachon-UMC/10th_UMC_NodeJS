@@ -1,6 +1,3 @@
-import { StatusCodes } from "http-status-codes";
-import { AppError } from "../../../common/errors.js";
-
 import {
   responseFromCompletedMission,
   responseFromUserMission,
@@ -11,6 +8,12 @@ import {
   getUserMissionByMissionId,
   updateUserMissionStatus,
 } from "../repositories/mission.repository.js";
+import {
+  AlreadyChallengingMissionError,
+  AlreadyCompletedMissionError,
+  MissionNotFoundError,
+  UserMissionNotFoundError,
+} from "../../../common/customError.js";
 
 export const createChallangeMission = async (
   userId: number,
@@ -20,14 +23,14 @@ export const createChallangeMission = async (
   const mission = await getMissionById(missionId);
 
   if (!mission) {
-    throw new AppError("존재하지 않는 미션입니다.", StatusCodes.NOT_FOUND);
+    throw new MissionNotFoundError();
   }
 
   // 이미 도전 중인 미션인지 확인
   const existingMission = await getUserMissionByMissionId(userId, missionId);
 
   if (existingMission) {
-    throw new AppError("이미 도전 중인 미션입니다.", StatusCodes.CONFLICT);
+    throw new AlreadyChallengingMissionError();
   }
 
   // 생성
@@ -48,15 +51,12 @@ export const completeUserMission = async (
 
   // 존재 여부 확인
   if (!existing) {
-    throw new AppError(
-      "해당 미션을 도전한 기록이 없습니다.",
-      StatusCodes.NOT_FOUND,
-    );
+    throw new UserMissionNotFoundError();
   }
 
   // 이미 완료된 경우
   if (existing.status === 1) {
-    throw new AppError("이미 완료된 미션입니다.", StatusCodes.CONFLICT);
+    throw new AlreadyCompletedMissionError();
   }
 
   await updateUserMissionStatus(userId, missionId);

@@ -12,8 +12,11 @@ import {
   completeUserMission,
   createChallangeMission,
 } from "../services/mission.service.js";
-import { AppError } from "../../../common/errors.js";
 import { success } from "../../../common/responses.js";
+import {
+  InvalidMissionIdError,
+  UnauthorizedUserError,
+} from "../../../common/customError.js";
 
 @Route("missions")
 @Tags("Mission")
@@ -27,15 +30,12 @@ export class MissionController extends Controller {
 
     // missionId 검증
     if (!missionId || Number.isNaN(missionId)) {
-      throw new AppError(
-        "유효하지 않은 missionId 입니다.",
-        StatusCodes.BAD_REQUEST,
-      );
+      throw new InvalidMissionIdError();
     }
 
     // userId 검증
     if (!userId) {
-      throw new AppError("사용자 정보가 없습니다.", StatusCodes.UNAUTHORIZED);
+      throw new UnauthorizedUserError();
     }
 
     const mission = await createChallangeMission(userId, missionId);
@@ -53,15 +53,12 @@ export class MissionController extends Controller {
 
     // userId 검증
     if (!userId) {
-      throw new AppError("사용자 정보가 없습니다.", StatusCodes.UNAUTHORIZED);
+      throw new UnauthorizedUserError();
     }
 
     // missionId 검증
     if (!missionId || Number.isNaN(missionId)) {
-      throw new AppError(
-        "유효하지 않은 missionId 입니다.",
-        StatusCodes.BAD_REQUEST,
-      );
+      throw new InvalidMissionIdError();
     }
 
     const result = await completeUserMission(userId, missionId);
