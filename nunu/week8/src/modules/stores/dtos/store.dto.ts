@@ -1,6 +1,20 @@
 export interface CreateStoreRequest {
+  /**
+   * 생성한 가게 이름
+   * @example "용가훠궈"
+   */
   name: string;
+
+  /**
+   * 생성한 가게의 유형
+   * @example "중식당"
+   */
   storeType: string;
+
+  /**
+   * 지역 ID
+   * @example "1"
+   */
   regionId: number;
 }
 
