@@ -1,0 +1,213 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model FoodCategory {
+  id   BigInt @id @default(autoincrement())
+  name String @db.VarChar(50)
+
+  @@map("food_category")
+}
+
+model Inquiry {
+  id        BigInt        @id @default(autoincrement())
+  userId    BigInt        @map("user_id")
+  title     String        @db.VarChar(100)
+  content   String?       @db.VarChar(500)
+  status    InquiryStatus
+  createdAt DateTime      @map("created_at") @db.DateTime(6)
+  updatedAt DateTime?     @map("updated_at") @db.DateTime(6)
+
+  @@map("inquiry")
+}
+
+model InquiryImage {
+  id         BigInt    @id @default(autoincrement())
+  inquiryId  BigInt    @map("inquiry_id")
+  imageUrl   String    @map("image_url") @db.VarChar(200)
+  imageOrder BigInt    @map("image_order")
+  createdAt  DateTime? @map("created_at") @db.DateTime(6)
+
+  @@map("inquiry_image")
+}
+
+model Mission {
+  id          BigInt    @id @default(autoincrement())
+  storeId     BigInt    @map("store_id")
+  content     String    @db.VarChar(500)
+  rewardPoint BigInt    @map("reward_point")
+  deadline    BigInt?
+  createdAt   DateTime  @map("created_at") @db.DateTime(6)
+  updatedAt   DateTime? @map("updated_at") @db.DateTime(6)
+
+  @@map("mission")
+}
+
+model Notification {
+  id        BigInt    @id @default(autoincrement())
+  userId    BigInt    @map("user_id")
+  reviewId  BigInt?   @map("review_id")
+  missionId BigInt?   @map("mission_id")
+  type      String    @db.VarChar(500)
+  content   String    @db.VarChar(500)
+  isRead    Boolean?  @default(false) @map("is_read")
+  createdAt DateTime  @map("created_at") @db.DateTime(6)
+  updatedAt DateTime? @map("updated_at") @db.DateTime(6)
+
+  @@map("notification")
+}
+
+model PointHistory {
+  id             BigInt    @id @default(autoincrement())
+  userId         BigInt    @map("user_id")
+  type           String    @db.VarChar(500)
+  point          BigInt
+  storeName      String?   @map("store_name") @db.VarChar(100)
+  missionContent String?   @map("mission_content") @db.VarChar(500)
+  createdAt      DateTime  @map("created_at") @db.DateTime(6)
+  updatedAt      DateTime? @map("updated_at") @db.DateTime(6)
+
+  @@map("point_history")
+}
+
+model Region {
+  id   BigInt @id @default(autoincrement())
+  name String @db.VarChar(100)
+
+  @@map("region")
+}
+
+model Review {
+  id        BigInt    @id @default(autoincrement())
+  storeId   BigInt    @map("store_id")
+  userId    BigInt    @map("user_id")
+  rating    Decimal   @db.Decimal(3, 1)
+  content   String?   @db.Text
+  createdAt DateTime  @map("created_at") @db.DateTime(6)
+  updatedAt DateTime? @map("updated_at") @db.DateTime(6)
+
+  @@map("review")
+}
+
+model ReviewComment {
+  id        BigInt    @id @default(autoincrement())
+  reviewId  BigInt    @map("review_id")
+  content   String?   @db.Text
+  createdAt DateTime  @map("created_at") @db.DateTime(6)
+  updatedAt DateTime? @map("updated_at") @db.DateTime(6)
+
+  @@map("review_comment")
+}
+
+model ReviewImage {
+  id         BigInt    @id @default(autoincrement())
+  reviewId   BigInt    @map("review_id")
+  imageUrl   String    @map("image_url") @db.VarChar(200)
+  imageOrder BigInt    @map("image_order")
+  createdAt  DateTime? @map("created_at") @db.DateTime(6)
+
+  @@map("review_image")
+}
+
+model Store {
+  id                 BigInt    @id @default(autoincrement())
+  name               String    @db.VarChar(100)
+  foodCategoryId     BigInt    @map("food_category_id")
+  regionId           BigInt    @map("region_id")
+  address            String    @db.VarChar(255)
+  latitude           Decimal   @db.Decimal(18, 10)
+  longitude          Decimal   @db.Decimal(18, 10)
+  businessStartHours DateTime? @map("business_start_hours") @db.Time(0)
+  businessEndHours   DateTime? @map("business_end_hours") @db.Time(0)
+  createdAt          DateTime  @map("created_at") @db.DateTime(6)
+  updatedAt          DateTime? @map("updated_at") @db.DateTime(6)
+
+  @@map("store")
+}
+
+model StoreImage {
+  id         BigInt    @id @default(autoincrement())
+  storeId    BigInt    @map("store_id")
+  imageUrl   String    @map("image_url") @db.VarChar(200)
+  imageOrder BigInt    @map("image_order")
+  createdAt  DateTime? @map("created_at") @db.DateTime(6)
+
+  @@map("store_image")
+}
+
+model User {
+  id                              BigInt      @id @default(autoincrement())
+  name                            String      @db.VarChar(50)
+  gender                          UserGender
+  birthDate                       DateTime    @map("birth_date") @db.Date
+  regionId                        BigInt      @map("region_id")
+  address                         String      @db.VarChar(100)
+  latitude                        Decimal     @db.Decimal(18, 10)
+  longitude                       Decimal     @db.Decimal(18, 10)
+  createdAt                       DateTime    @map("created_at") @db.DateTime(6)
+  point                           BigInt?     @default(0)
+  email                           String      @db.VarChar(255)
+  phone                           String?     @db.VarChar(50)
+  eventNotificationEnabled        Boolean?    @default(false) @map("event_notification_enabled")
+  reviewReplyNotificationEnabled  Boolean?    @default(false) @map("review_reply_notification_enabled")
+  inquiryReplyNotificationEnabled Boolean?    @default(false) @map("inquiry_reply_notification_enabled")
+  deletedAt                       DateTime?   @map("deleted_at") @db.DateTime(6)
+  updatedAt                       DateTime?   @map("updated_at") @db.DateTime(6)
+
+  @@map("user")
+}
+
+model UserFoodCategory {
+  foodCategoryId BigInt @map("food_category_id")
+  userId         BigInt @map("user_id")
+
+  @@id([foodCategoryId, userId])
+  @@map("user_food_category")
+}
+
+model UserMission {
+  id        BigInt           @id @default(autoincrement())
+  userId    BigInt           @map("user_id")
+  missionId BigInt           @map("mission_id")
+  status    UserMissionStatus
+  createdAt DateTime         @map("created_at") @db.DateTime(6)
+  updatedAt DateTime?        @map("updated_at") @db.DateTime(6)
+
+  @@map("user_mission")
+}
+
+model UserRegionMissionCount {
+  userId        BigInt  @map("user_id")
+  regionId      BigInt  @map("region_id")
+  missionCount  BigInt? @default(0) @map("mission_count")
+
+  @@id([userId, regionId])
+  @@map("user_region_mission_count")
+}
+
+enum UserGender {
+  MALE
+  FEMALE
+  NONE
+
+  @@map("user_gender")
+}
+
+enum InquiryStatus {
+  WAITING
+  IN_PROGRESS
+  ANSWERED
+  DONE
+
+  @@map("inquiry_status")
+}
+
+enum UserMissionStatus {
+  CHALLENGING
+  DONE
+}
