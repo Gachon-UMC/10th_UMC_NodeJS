@@ -2,19 +2,19 @@
 export interface UserSignUpRequest {
   /**
    * 사용자 이메일
-   * @example test@test.com
+   * @example "test@test.com"
    */
   email: string;
 
   /**
    * 비밀번호
-   * @example 123456
+   * @example "123456"
    */
   password: string;
 
   /**
    * 사용자 이름
-   * @example UMC
+   * @example "UMC"
    */
   name: string;
 
@@ -26,19 +26,19 @@ export interface UserSignUpRequest {
 
   /**
    * 생년월일
-   * @example 2000-01-01
+   * @example "2000-01-01"
    */
   birthDate: string;
 
   /**
    * 주소
-   * @example 서울특별시 강남구
+   * @example "서울특별시 강남구"
    */
   address?: string;
 
   /**
    * 전화번호
-   * @example 010-1234-5678
+   * @example "010-1234-5678"
    */
   phoneNumber?: string;
 
@@ -49,18 +49,7 @@ export interface UserSignUpRequest {
   preferences: number[];
 }
 
-export class UserSignUpRequestExample {
-  email!: string;
-  password!: string;
-  name!: string;
-  gender?: "MALE" | "FEMALE";
-  birthDate!: string;
-  address?: string;
-  phoneNumber?: string;
-  preferences!: number[];
-}
-
-interface UserResponse {
+export interface UserResponse {
   id: number;
   email: string;
   name: string;

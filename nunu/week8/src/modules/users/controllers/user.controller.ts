@@ -12,14 +12,15 @@ import {
   Example,
 } from "tsoa";
 import { StatusCodes } from "http-status-codes";
-import {
-  UserSignUpRequest,
-  UserSignUpRequestExample,
-} from "../dtos/user.dto.js";
+import { UserResponse, UserSignUpRequest } from "../dtos/user.dto.js";
 import { userSignUp } from "../services/user.service.js";
 import { authorizeUser } from "../../../middlewares/auth.middleware.js";
 import { Request as ExpressRequest } from "express";
-import { success, UserErrorResponse } from "../../../common/responses.js";
+import {
+  success,
+  SuccessResponseType,
+  UserErrorResponse,
+} from "../../../common/responses.js";
 import {
   EmptyPreferencesError,
   InvalidEmailFormatError,
@@ -52,15 +53,16 @@ export class UserController extends Controller {
    * 회원가입 API
    */
   @Post("/signup")
-  @Example<UserSignUpRequestExample>({
-    email: "test@test.com",
-    password: "123456",
-    name: "UMC",
-    gender: "MALE",
-    birthDate: "2000-01-01",
-    address: "서울특별시 강남구",
-    phoneNumber: "010-1234-5678",
-    preferences: [1, 2],
+  @Example<SuccessResponseType<UserResponse>>({
+    success: true,
+    statusCode: 201,
+    message: "회원가입이 완료되었습니다.",
+    data: {
+      id: 1,
+      email: "test@test.com",
+      name: "UMC",
+      preferences: ["한식", "중식"],
+    },
   })
   public async handleUserSignUp(@Body() data: UserSignUpRequest) {
     console.log("회원가입을 요청했습니다!");

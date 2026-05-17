@@ -1,4 +1,4 @@
-export interface SuccessResponse<T> {
+export interface SuccessResponseType<T> {
   success: true;
   statusCode: number;
   message: string;
@@ -9,7 +9,7 @@ export const success = <T>(
   data: T,
   message = "성공",
   statusCode = 200,
-): SuccessResponse<T> => ({
+): SuccessResponseType<T> => ({
   success: true,
   statusCode,
   message,
@@ -19,7 +19,6 @@ export const success = <T>(
 export interface UserErrorResponse {
   success: false;
   statusCode: number;
-  errorCode?: string;
   message: string;
   data: null;
 }
