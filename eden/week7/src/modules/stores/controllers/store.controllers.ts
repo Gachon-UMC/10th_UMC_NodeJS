@@ -3,7 +3,7 @@ import { createStore } from "../services/store.services.js";
 import { AddStoreRequestDTO, StoreResponseDTO } from "../dtos/store.dtos.js";
 import { Body, Path, Post, Route, Tags, SuccessResponse } from "tsoa";
 import { ApiResponse, success } from "../../../common/responses/response.js";
-import { AppError } from "../../../common/errors/app.error.js";
+
 
 
 @Route("region")
@@ -17,13 +17,6 @@ export class StoreController {
     @Path() regionId: number, 
     @Body() storeData: AddStoreRequestDTO 
   ):Promise<ApiResponse<StoreResponseDTO >> {
-    if (!regionId || Number.isNaN(regionId)) {
-      throw new AppError({
-        errorCode: "INVALID_REGION_ID",
-        message: "존재하지 않는 지역입니다.",
-        statusCode: 400
-      });
-    }
   
     const newStore = await createStore(regionId, storeData);
     

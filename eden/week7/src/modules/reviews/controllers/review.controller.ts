@@ -16,13 +16,7 @@ export class ReviewController extends Controller {
     @Path() storeId: number,
     @Body() reviewData: AddReviewRequestDTO
   ): Promise<ApiResponse<{ newReviewId: number }>> {
-    if (!storeId || Number.isNaN(storeId)) {  
-    throw new AppError({
-      errorCode: "INVALID_STORE_ID",
-      message: "존재하지 않는 가게입니다.",
-      statusCode: 400
-    });
-  }
+  
     const result = await createReview(storeId, reviewData);
 
     this.setStatus(StatusCodes.CREATED);

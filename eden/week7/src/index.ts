@@ -5,6 +5,7 @@ import { RegisterRoutes } from "./generated/routes";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { AppError } from "./common/errors/app.error";
+import errorHandler from "./common/middlewares/errorHandeler";
 
 // 1. 환경 변수 설정
 dotenv.config();
@@ -61,6 +62,7 @@ const isLogin = (req: Request, res: Response, next: NextFunction) => {
 // Express.js에 생성한 엔드 포인트들을 register
 const router = express.Router();
 RegisterRoutes(router); 
+app.use(errorHandler);
 app.use("/api/v1", router);
 
 app.get('/mypage', isLogin, (req, res) => {
