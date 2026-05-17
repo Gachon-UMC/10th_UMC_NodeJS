@@ -16,6 +16,11 @@ import { authorizeUser } from "../../../middlewares/auth.middleware.js";
 import { Request as ExpressRequest } from "express";
 import { success } from "../../../common/responses.js";
 import { AppError } from "../../../common/errors.js";
+import {
+  EmptyPreferencesError,
+  InvalidEmailFormatError,
+  InvalidPasswordError,
+} from "../../../common/customError.js";
 
 @Route("users")
 @Tags("User")
@@ -30,26 +35,17 @@ export class UserController extends Controller {
 
     // 이메일 형식 검사
     if (!emailRegex.test(data.email)) {
-      throw new AppError(
-        "올바르지 않은 이메일 형식입니다.",
-        StatusCodes.BAD_REQUEST,
-      );
+      throw new InvalidEmailFormatError();
     }
 
     // 비밀번호 형식 검사
     if (!data.password || data.password.length < 6) {
-      throw new AppError(
-        "비밀번호는 6자 이상이어야 합니다.",
-        StatusCodes.BAD_REQUEST,
-      );
+      throw new InvalidPasswordError();
     }
 
     // preferences 존재 여부
     if (!data.preferences || data.preferences.length === 0) {
-      throw new AppError(
-        "선호 카테고리를 최소 1개 선택해야 합니다.",
-        StatusCodes.BAD_REQUEST,
-      );
+      throw new EmptyPreferencesError();
     }
 
     const user = await userSignUp(data);

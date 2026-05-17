@@ -9,10 +9,15 @@ const errorHandler = (
 ) => {
   console.error(err);
 
+  if (res.headersSent) {
+    return next(err);
+  }
+
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
       success: false,
       statusCode: err.statusCode,
+      errorCode: err.errorCode,
       message: err.message,
       data: null,
     });

@@ -9,6 +9,7 @@ import {
   setPreference,
 } from "../repositories/user.repository.js";
 import bcrypt from "bcrypt";
+import { DuplicateUserEmailError } from "../../../common/customError.js";
 
 export const userSignUp = async (data: UserSignUpRequest) => {
   const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -25,7 +26,7 @@ export const userSignUp = async (data: UserSignUpRequest) => {
 
   // 이메일 중복
   if (joinUserId === null) {
-    throw new AppError("이미 존재하는 이메일입니다.", StatusCodes.BAD_REQUEST);
+    throw new DuplicateUserEmailError(data);
   }
 
   for (const preference of data.preferences) {
