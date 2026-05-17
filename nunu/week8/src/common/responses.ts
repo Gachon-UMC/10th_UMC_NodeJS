@@ -16,7 +16,7 @@ export const success = <T>(
   data,
 });
 
-export interface UserErrorResponse {
+export interface ErrorResponse {
   success: false;
   statusCode: number;
   message: string;

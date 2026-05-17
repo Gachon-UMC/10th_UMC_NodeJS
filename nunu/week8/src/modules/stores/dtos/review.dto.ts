@@ -1,7 +1,16 @@
 import { Prisma } from "../../../generated/prisma/client.js";
 
 export interface CreateReviewRequest {
+  /**
+   * 리뷰 내용
+   * @example "너무 맛있어요!"
+   */
   content: string;
+
+  /**
+   * 리뷰 별점
+   * @example "4.5"
+   */
   starRate: number;
 }
 

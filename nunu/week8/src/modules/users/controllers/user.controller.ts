@@ -19,7 +19,7 @@ import { Request as ExpressRequest } from "express";
 import {
   success,
   SuccessResponseType,
-  UserErrorResponse,
+  ErrorResponse,
 } from "../../../common/responses.js";
 import {
   EmptyPreferencesError,
@@ -31,26 +31,34 @@ import {
 @Tags("User")
 export class UserController extends Controller {
   @SuccessResponse(StatusCodes.CREATED, "회원가입 성공")
-  @Response<UserErrorResponse>(StatusCodes.BAD_REQUEST, "잘못된 요청", {
+  @Response<ErrorResponse>(StatusCodes.BAD_REQUEST, "잘못된 요청", {
     success: false,
     statusCode: 400,
     message: "잘못된 요청입니다.",
     data: null,
   })
-  @Response<UserErrorResponse>(StatusCodes.CONFLICT, "중복된 이메일", {
+  @Response<ErrorResponse>(StatusCodes.CONFLICT, "중복된 이메일", {
     success: false,
     statusCode: 409,
     message: "이미 존재하는 이메일입니다.",
     data: null,
   })
-  @Response<UserErrorResponse>(StatusCodes.INTERNAL_SERVER_ERROR, "서버 오류", {
+  @Response<ErrorResponse>(StatusCodes.INTERNAL_SERVER_ERROR, "서버 오류", {
     success: false,
     statusCode: 500,
     message: "서버 오류가 발생했습니다.",
     data: null,
   })
+
   /**
-   * 회원가입 API
+   * @summary 회원가입 API
+   * @description 새로운 사용자를 생성합니다.
+   *
+   * - 이메일은 중복될 수 없습니다.
+   * - 비밀번호는 6자 이상이어야 합니다.
+   * - 선호 카테고리를 최소 1개 이상 선택해야 합니다.
+   *
+   * @param data 회원가입 요청 정보
    */
   @Post("/signup")
   @Example<SuccessResponseType<UserResponse>>({
