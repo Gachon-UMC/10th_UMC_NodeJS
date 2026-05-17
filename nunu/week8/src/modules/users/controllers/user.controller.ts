@@ -7,15 +7,19 @@ import {
   Request,
   Route,
   SuccessResponse,
+  Response,
   Tags,
+  Example,
 } from "tsoa";
 import { StatusCodes } from "http-status-codes";
-import { UserSignUpRequest } from "../dtos/user.dto.js";
+import {
+  UserSignUpRequest,
+  UserSignUpRequestExample,
+} from "../dtos/user.dto.js";
 import { userSignUp } from "../services/user.service.js";
 import { authorizeUser } from "../../../middlewares/auth.middleware.js";
 import { Request as ExpressRequest } from "express";
-import { success } from "../../../common/responses.js";
-import { AppError } from "../../../common/errors.js";
+import { success, UserErrorResponse } from "../../../common/responses.js";
 import {
   EmptyPreferencesError,
   InvalidEmailFormatError,
@@ -26,7 +30,38 @@ import {
 @Tags("User")
 export class UserController extends Controller {
   @SuccessResponse(StatusCodes.CREATED, "회원가입 성공")
+  @Response<UserErrorResponse>(StatusCodes.BAD_REQUEST, "잘못된 요청", {
+    success: false,
+    statusCode: 400,
+    message: "잘못된 요청입니다.",
+    data: null,
+  })
+  @Response<UserErrorResponse>(StatusCodes.CONFLICT, "중복된 이메일", {
+    success: false,
+    statusCode: 409,
+    message: "이미 존재하는 이메일입니다.",
+    data: null,
+  })
+  @Response<UserErrorResponse>(StatusCodes.INTERNAL_SERVER_ERROR, "서버 오류", {
+    success: false,
+    statusCode: 500,
+    message: "서버 오류가 발생했습니다.",
+    data: null,
+  })
+  /**
+   * 회원가입 API
+   */
   @Post("/signup")
+  @Example<UserSignUpRequestExample>({
+    email: "test@test.com",
+    password: "123456",
+    name: "UMC",
+    gender: "MALE",
+    birthDate: "2000-01-01",
+    address: "서울특별시 강남구",
+    phoneNumber: "010-1234-5678",
+    preferences: [1, 2],
+  })
   public async handleUserSignUp(@Body() data: UserSignUpRequest) {
     console.log("회원가입을 요청했습니다!");
     console.log("body:", data);

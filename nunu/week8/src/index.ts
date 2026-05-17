@@ -5,6 +5,9 @@ import errorHandler from "./middlewares/errorHandler.js";
 import { RegisterRoutes } from "./generated/routes.js";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
+import path from "path";
+import fs from "fs";
 
 // 1. 환경 변수 설정
 dotenv.config();
@@ -50,12 +53,17 @@ app.get("/getcookie", (req, res) => {
   }
 });
 
+const swaggerFile = JSON.parse(
+  fs.readFileSync(path.resolve("dist/swagger.json"), "utf8"),
+);
+
 // 4. API 라우트
 const router = express.Router();
 
 RegisterRoutes(router);
 app.use("/api/v1", router);
 app.use(errorHandler);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // 5. 서버 시작
 app.listen(port, () => {

@@ -15,3 +15,11 @@ export const success = <T>(
   message,
   data,
 });
+
+export interface UserErrorResponse {
+  success: false;
+  statusCode: number;
+  errorCode?: string;
+  message: string;
+  data: null;
+}
