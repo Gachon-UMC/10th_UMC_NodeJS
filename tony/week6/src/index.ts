@@ -1,14 +1,9 @@
+import swaggerUi from "swagger-ui-express";
+import path from "path";
+import fs from "fs";
 
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
-import {
-  handleAddReview,
-  handleAddMission,
-  handleGetMyReviews,
-  handleGetStoreMissions,
-  handleCompleteMission
-} from "./modules/stores/controllers/store.controller.js";
-import { handleChallengeMission } from "./modules/missions/controllers/mission.controller.js";
 import dotenv from "dotenv";
 import express, { Express, Request, Response, NextFunction } from "express";
 import cors from "cors";
@@ -48,6 +43,11 @@ app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형
 app.use(morgan("dev"));
 app.use(cookieParser());
 
+const swaggerFile = JSON.parse(
+  fs.readFileSync(path.resolve("dist/swagger.json"), "utf8")
+);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 // 3. 기본 라우트
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World! This is TypeScript Server!");
@@ -72,20 +72,7 @@ app.use(
   }
 );
 
-app.post("/api/v1/stores/:storeId/reviews", handleAddReview);
 
-app.patch("/api/v1/users/missions/:missionId", handleChallengeMission);
-
-app.post("/api/v1/stores/:storeId/missions", handleAddMission);
-
-app.get("/api/v1/reviews/my", handleGetMyReviews);
-
-app.get("/api/v1/stores/:storeId/missions", handleGetStoreMissions);
-
-app.patch(
-  "/api/v1/missions/:userMissionId/complete",
-  handleCompleteMission
-);
 // 4. 서버 시작
 app.listen(port, () => {
   console.log(`[server]: Server is running at <http://localhost>:${port}`);

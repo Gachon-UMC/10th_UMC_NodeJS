@@ -1,72 +1,119 @@
-import { success } from "../../../common/responses/response.js";
-import { completeMissionService } from "../services/store.service.js";
-import { Request, Response } from "express";
+import {
+  Body,
+  Controller,
+  Get,
+  Path,
+  Post,
+  Patch,
+  Query,
+  Route,
+  Tags,
+  Response,
+} from "tsoa";
+
+import { success, ApiResponse } from "../../../common/responses/response.js";
+
 import {
   getMyReviewsService,
   getMissionsByStoreService,
   createReview,
   createMission,
+  completeMissionService,
 } from "../services/store.service.js";
-import { responseFromReviews } from "../dtos/store.dto.js";
 
-export const handleAddReview = async (req: Request, res: Response) => {
-  const storeId = Number(req.params.storeId);
+import {
+  AddMissionRequest,
+  AddReviewRequest,
+  responseFromReviews,
+} from "../dtos/store.dto.js";
 
-  await createReview(storeId, req.body);
+@Route("stores")
+@Tags("Stores")
+export class StoreController extends Controller {
 
-  res.status(200).json(
-  success({
-    message: "리뷰 등록 완료",
-  })
-);
-};
+  /**
+   * 가게 리뷰 등록 API
+   * @summary 특정 가게에 리뷰를 등록합니다.
+   */
+  @Post("{storeId}/reviews")
+  @Response<ApiResponse<null>>(200, "리뷰 등록 성공")
+  @Response<ApiResponse<null>>(404, "가게를 찾을 수 없음")
+  public async handleAddReview(
+    @Path() storeId: number,
+    @Body() body: AddReviewRequest
+  ) {
+    await createReview(storeId, body);
 
+    return success({
+      message: "리뷰 등록 완료",
+    });
+  }
 
+  /**
+   * 가게 미션 등록 API
+   * @summary 특정 가게에 미션을 등록합니다.
+   */
+  @Post("{storeId}/missions")
+  @Response<ApiResponse<null>>(200, "미션 등록 성공")
+  @Response<ApiResponse<null>>(404, "가게를 찾을 수 없음")
+  public async handleAddMission(
+    @Path() storeId: number,
+    @Body() body: AddMissionRequest
+  ) {
+    await createMission(storeId, body);
 
-export const handleAddMission = async (req: Request, res: Response) => {
-  const storeId = Number(req.params.storeId);
+    return success({
+      message: "미션 등록 완료",
+    });
+  }
 
-  await createMission(storeId, req.body);
+  /**
+   * 내가 작성한 리뷰 조회 API
+   * @summary 사용자 리뷰 목록을 조회합니다.
+   */
+  @Get("/reviews/my")
+  @Response<ApiResponse<any>>(200, "리뷰 조회 성공")
+  public async handleGetMyReviews(
+    @Query() cursor?: number
+  ) {
+    const userId = 1;
 
-  res.status(200).json(
-  success({
-    message: "미션 등록 완료",
-  })
-);
-};
+    const reviews = await getMyReviewsService(userId, cursor);
 
-export const handleGetMyReviews = async (req: Request, res: Response) => {
-  const userId = 1; // 추후 JWT 기반 ID 적용?
+    return success(responseFromReviews(reviews));
+  }
 
-  const cursor = req.query.cursor
-    ? parseInt(req.query.cursor as string)
-    : undefined;
+  /**
+   * 특정 가게 미션 조회 API
+   * @summary 특정 가게의 미션 목록을 조회합니다.
+   */
+  @Get("{storeId}/missions")
+  @Response<ApiResponse<any>>(200, "미션 조회 성공")
+  public async handleGetStoreMissions(
+    @Path() storeId: number,
+    @Query() cursor?: number
+  ) {
+    const missions = await getMissionsByStoreService(
+      storeId,
+      cursor
+    );
 
-  const reviews = await getMyReviewsService(userId, cursor);
+    return success(missions);
+  }
 
-  res.json(success(responseFromReviews(reviews)));
-};
+  /**
+   * 미션 완료 처리 API
+   * @summary 사용자의 미션 상태를 COMPLETE로 변경합니다.
+   */
+  @Patch("/missions/{userMissionId}/complete")
+  @Response<ApiResponse<null>>(200, "미션 완료 성공")
+  public async handleCompleteMission(
+    @Path() userMissionId: number
+  ) {
+    await completeMissionService(userMissionId);
 
-export const handleGetStoreMissions = async (req: Request, res: Response) => {
-  const storeId = parseInt(req.params.storeId as string);
-
-     const cursor = req.query.cursor
-      ?parseInt(req.query.cursor as string)
-      :undefined;
-
-     const missions = await getMissionsByStoreService(storeId, cursor);
-
-  res.json(success(missions));
-};
-
-export const handleCompleteMission = async (req: Request, res: Response) => {
-  const userMissionId = parseInt(req.params.userMissionId as string);
-
-  await completeMissionService(userMissionId);
-
-  res.json(
-  success({
-    message: "미션 완료 처리 성공",
-  })
-);
-};
+    return success({
+      message: "미션 완료 처리 성공",
+    });
+  }
+}

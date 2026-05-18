@@ -1,3 +1,4 @@
+import {AppError} from "../../../common/errors/app.error.js"
 import { ChallengeMissionRequest } from "../dtos/mission.dto.js";
 import {
   addUserMission,
@@ -12,7 +13,11 @@ export const challengeMission = async (
   const mission = await getMissionById(missionId);
 
   if (!mission) {
-    throw new Error("존재하지 않는 미션입니다.");
+    throw new AppError({
+      errorCode: "MISSION_NOT_FOUND",
+      message: "존재하지 않는 미션입니다.",
+      statusCode: 404
+    });
   }
 
   const userMission = await getUserMission(
@@ -21,7 +26,11 @@ export const challengeMission = async (
   );
 
   if (userMission) {
-    throw new Error("이미 도전 중인 미션입니다.");
+    throw new AppError({
+      errorCode: "ALREADY_CHALLENGING_MISSION",
+      message: "이미 도전 중인 미션입니다.",
+      statusCode: 409
+    });
   }
 
   const result = await addUserMission(data.userId, missionId);

@@ -21,6 +21,11 @@ import { UserSignUpRequest,
 @Route("users")
 @Tags("Users")
 export class UserController extends Controller {
+  /**
+   * 
+   * 회원가입 API
+   * @summary 회원가입을 처리하는 엔드포인트입니다.
+   */
   @Post("signup")
   public async handleUserSignUp(
     @Body() body: UserSignUpRequest

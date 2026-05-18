@@ -1,3 +1,4 @@
+import {AppError} from "../../../common/errors/app.error.js";
 import { completeMission } from "../repositories/store.repository.js";
 import {
   getMyReviews,
@@ -15,7 +16,11 @@ export const createReview = async (
   const stores = await getStoreById(storeId);
 
   if (!stores) {
-    throw new Error("존재하지 않는 가게입니다.");
+    throw new AppError({
+      errorCode: "STORE_NOT_FOUND",
+      message: "존재하지 않는 가게입니다.",
+      statusCode: 404
+    });
   }
 
   const review = await addReview(
@@ -35,7 +40,11 @@ export const createMission = async (
   const stores = await getStoreById(storeId);
 
   if (!stores) {
-    throw new Error("존재하지 않는 가게입니다.");
+    throw new AppError({
+      errorCode: "STORE_NOT_FOUND",
+      message: "존재하지 않는 가게입니다.",
+      statusCode: 404
+    });
   }
 
   const mission = await addMission(
