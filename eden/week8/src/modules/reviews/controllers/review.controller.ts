@@ -14,6 +14,8 @@ export class ReviewController extends Controller {
    /**
    * 특정 가게에 리뷰 추가
    * @summary 특정 가게에 리뷰를 추가하는 엔드포인트입니다.
+   * @param storeId 리뷰를 추가할 대상 가게의 고유 식별 번호 (ID)
+   
    */
   @Post("{storeId}")
   @SuccessResponse(StatusCodes.CREATED, "Created")
@@ -36,6 +38,8 @@ export class ReviewController extends Controller {
    /**
    * 내가 작성한 리뷰 목록 조회
    * @summary 내가 작성한 리뷰 목록을 조회하는 엔드포인트입니다.
+   * @param userId 리뷰 목록을 조회할 유저의 고유 식별 번호 (ID)
+  
    */
   
   @Get("my")
@@ -54,6 +58,9 @@ export class ReviewController extends Controller {
    /**
    * 특정 가게에 리뷰 목록조회
    * @summary 특정 가게에 리뷰목록을 조회하는 엔드포인트입니다.
+   * @param storeId 리뷰 목록을 조회할 대상 가게의 고유 식별 번호 (ID)
+   * @param cursor 페이지네이션을 위한 커서 값 (옵션)
+   
    */
   @Get("{storeId}")
     @SuccessResponse(StatusCodes.OK, "Success")

@@ -21,6 +21,8 @@ export class MissionController extends Controller {
    /**
    * 특정 가게에 미션 추가
    * @summary 특정 가게에 미션을 추가하는 엔드포인트입니다.
+   *  @param storeId 미션을 추가할 대상 가게의 고유 식별 번호 (ID)
+   
    */
   @Post("stores/{storeId}")
   @SuccessResponse(StatusCodes.CREATED, "Created")
@@ -29,6 +31,7 @@ export class MissionController extends Controller {
     @Response<MissionErrorResponse>(422, "잘못된 요청")
       @Response<MissionErrorResponse>(500, "서버 내부 오류")
   public async addMission(
+   
     @Path() storeId: number,
     @Body() missionData: AddMissionRequestDTO
   ): Promise<ApiResponse<{ newMissionId: number }>> {
@@ -42,6 +45,8 @@ export class MissionController extends Controller {
    /**
    * 특정 가게에 미션 목록조회
    * @summary 특정 가게에 미션목록을 조회하는 엔드포인트입니다.
+   * @param storeId 미션 목록을 조회할 대상 가게의 고유 식별 번호 (ID)
+   
    */
   @Get("stores/{storeId}")
 @SuccessResponse(StatusCodes.OK, "Success")
@@ -60,6 +65,9 @@ export class MissionController extends Controller {
    /**
    * 유저가 미션에 도전
    * @summary 유저가 미션에 도전하는 엔드포인트입니다.
+   * @param userId 미션에 도전할 유저의 고유 식별 번호 (ID)
+   * @param missionId 도전할 미션의 고유 식별 번호 (ID)
+   
    */
   @Post("users/{userId}/{missionId}")
   @SuccessResponse(StatusCodes.CREATED, "Success")
@@ -81,6 +89,8 @@ export class MissionController extends Controller {
    /**
    * 내가 진행중인 미션목록
    * @summary 내가 진행중인 미션목록을 조회하는 엔드포인트입니다.
+   * @param userId 미션 목록을 조회할 유저의 고유 식별 번호 (ID)
+   
    */
   @Get("users/{userId}/challenging")
     @SuccessResponse(StatusCodes.OK, "Success")
@@ -100,6 +110,9 @@ export class MissionController extends Controller {
    /**
    * 진행중인 미션 완료 처리
    * @summary 진행중인 미션을 완료 처리하는 엔드포인트입니다
+   * @param userId 완료 처리할 미션에 도전한 유저의 고유 식별 번호 (ID)
+   * @param missionId 완료 처리할 미션의 고유 식별 번호 (ID)
+   
    */
   @Patch("users/{userId}/{missionId}")
     @SuccessResponse(StatusCodes.OK, "Success")
@@ -120,6 +133,8 @@ export class MissionController extends Controller {
    /**
    * 내가 완료한 미션 목록 조회
    * @summary 내가 완료한 미션목록을 조회하는 엔드포인트입니다. 
+   * @param userId 완료한 미션 목록을 조회할 유저의 고유 식별 번호 (ID)
+   
    */
   @Get("users/{userId}/completed")
     @SuccessResponse(StatusCodes.OK, "Success")

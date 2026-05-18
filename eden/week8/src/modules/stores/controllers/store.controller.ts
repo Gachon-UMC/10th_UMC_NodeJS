@@ -14,6 +14,9 @@ export class StoreController {
   /**
    * 가게생성 API
    * @summary 가게를 만드는 엔드포인트입니다.
+   * @param regionId 가게가 속할 지역의 고유 식별 번호 (ID)
+   * @param storeData 가게 생성에 필요한 정보가 담긴 객체
+  
    */
 
 @Post("{regionId}")

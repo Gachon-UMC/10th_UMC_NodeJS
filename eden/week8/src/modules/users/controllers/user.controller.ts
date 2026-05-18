@@ -23,6 +23,8 @@ export class UserController extends Controller {
     /**
    * 회원가입 API
    * @summary 회원가입을 처리하는 엔드포인트입니다.
+   * @param body 회원가입에 필요한 정보가 담긴 객체
+   
    */
   
   @Post("signup")

@@ -773,11 +773,13 @@
 				"security": [],
 				"parameters": [],
 				"requestBody": {
+					"description": "회원가입에 필요한 정보가 담긴 객체",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/UserSignUpRequest"
+								"$ref": "#/components/schemas/UserSignUpRequest",
+								"description": "회원가입에 필요한 정보가 담긴 객체"
 							}
 						}
 					}
@@ -947,6 +949,7 @@
 				"security": [],
 				"parameters": [
 					{
+						"description": "가게가 속할 지역의 고유 식별 번호 (ID)",
 						"in": "path",
 						"name": "regionId",
 						"required": true,
@@ -957,11 +960,13 @@
 					}
 				],
 				"requestBody": {
+					"description": "가게 생성에 필요한 정보가 담긴 객체",
 					"required": true,
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/AddStoreRequestDTO"
+								"$ref": "#/components/schemas/AddStoreRequestDTO",
+								"description": "가게 생성에 필요한 정보가 담긴 객체"
 							}
 						}
 					}
@@ -1031,6 +1036,7 @@
 				"security": [],
 				"parameters": [
 					{
+						"description": "리뷰를 추가할 대상 가게의 고유 식별 번호 (ID)",
 						"in": "path",
 						"name": "storeId",
 						"required": true,
@@ -1103,6 +1109,7 @@
 				"security": [],
 				"parameters": [
 					{
+						"description": "리뷰 목록을 조회할 대상 가게의 고유 식별 번호 (ID)",
 						"in": "path",
 						"name": "storeId",
 						"required": true,
@@ -1112,6 +1119,7 @@
 						}
 					},
 					{
+						"description": "페이지네이션을 위한 커서 값 (옵션)",
 						"in": "query",
 						"name": "cursor",
 						"required": true,
@@ -1176,6 +1184,7 @@
 				"security": [],
 				"parameters": [
 					{
+						"description": "리뷰 목록을 조회할 유저의 고유 식별 번호 (ID)",
 						"in": "query",
 						"name": "userId",
 						"required": true,
@@ -1240,6 +1249,7 @@
 				"security": [],
 				"parameters": [
 					{
+						"description": "미션을 추가할 대상 가게의 고유 식별 번호 (ID)",
 						"in": "path",
 						"name": "storeId",
 						"required": true,
@@ -1312,6 +1322,7 @@
 				"security": [],
 				"parameters": [
 					{
+						"description": "미션 목록을 조회할 대상 가게의 고유 식별 번호 (ID)",
 						"in": "path",
 						"name": "storeId",
 						"required": true,
@@ -1376,6 +1387,7 @@
 				"security": [],
 				"parameters": [
 					{
+						"description": "미션에 도전할 유저의 고유 식별 번호 (ID)",
 						"in": "path",
 						"name": "userId",
 						"required": true,
@@ -1385,6 +1397,7 @@
 						}
 					},
 					{
+						"description": "도전할 미션의 고유 식별 번호 (ID)",
 						"in": "path",
 						"name": "missionId",
 						"required": true,
@@ -1447,6 +1460,7 @@
 				"security": [],
 				"parameters": [
 					{
+						"description": "완료 처리할 미션에 도전한 유저의 고유 식별 번호 (ID)",
 						"in": "path",
 						"name": "userId",
 						"required": true,
@@ -1456,6 +1470,7 @@
 						}
 					},
 					{
+						"description": "완료 처리할 미션의 고유 식별 번호 (ID)",
 						"in": "path",
 						"name": "missionId",
 						"required": true,
@@ -1520,6 +1535,7 @@
 				"security": [],
 				"parameters": [
 					{
+						"description": "미션 목록을 조회할 유저의 고유 식별 번호 (ID)",
 						"in": "path",
 						"name": "userId",
 						"required": true,
@@ -1584,6 +1600,7 @@
 				"security": [],
 				"parameters": [
 					{
+						"description": "완료한 미션 목록을 조회할 유저의 고유 식별 번호 (ID)",
 						"in": "path",
 						"name": "userId",
 						"required": true,
