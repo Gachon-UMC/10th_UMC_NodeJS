@@ -15,7 +15,7 @@ interface MissionListQuery {
 export class MissionController extends Controller {
   /**
    * 미션 추가 API
-   * @summary 특정 가게에 미션을 추가하는 엔드포인트입니다.
+   * @summary 특정 가게에 미션을 추가하는 엔드포인트입니다.q
    */
   @Post("{storeId}/missions")
   @Response<MissionAddApiResponse>(200, "미션 추가 성공", {
